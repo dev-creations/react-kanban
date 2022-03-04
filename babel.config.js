@@ -12,6 +12,7 @@ module.exports = {
         exclude: ['transform-regenerator'],
       },
     ],
+    ['@babel/typescript'],
   ],
   plugins: ['@babel/plugin-proposal-optional-chaining'],
   env: {
@@ -25,4 +26,4 @@ module.exports = {
       plugins: ['react-remove-properties'],
     },
   },
-}
+};

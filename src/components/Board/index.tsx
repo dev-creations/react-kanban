@@ -1,3 +1,4 @@
+import React from 'react';
 import { forwardRef, useState } from 'react';
 import { DragDropContext } from 'react-beautiful-dnd';
 import Column from './components/Column';
@@ -15,7 +16,9 @@ import {
 } from './services';
 import { moveCard, moveColumn, addColumn, removeColumn, changeColumn, addCard, removeCard } from '@services/helpers';
 
-const Columns = forwardRef((props, ref) => <div ref={ref} style={{ whiteSpace: 'nowrap' }} {...props} />);
+const Columns = forwardRef<HTMLDivElement>((props, ref) => (
+  <div ref={ref} style={{ whiteSpace: 'nowrap' }} {...props} />
+));
 
 const DroppableBoard = withDroppable(Columns);
 
@@ -77,7 +80,7 @@ function UncontrolledBoard({
     setBoard(boardWithRenamedColumn);
   }
 
-  function handleCardAdd(column, card, options = {}) {
+  function handleCardAdd(column, card, options = {} as any) {
     const boardWithNewCard = addCard(board, column, card, options);
 
     onCardNew(
@@ -218,7 +221,7 @@ function BoardContainer({
   onCardDragEnd,
   onCardNew,
   allowAddCard,
-}) {
+}: any) {
   function handleOnDragEnd(event) {
     const coordinates = getCoordinates(event, board);
     if (!coordinates.source) return;

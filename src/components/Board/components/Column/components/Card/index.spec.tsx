@@ -1,5 +1,6 @@
+import React from 'react';
 import { render, screen } from '@testing-library/react';
-import Card from './';
+import Card from '.';
 import { callbacks } from 'react-beautiful-dnd';
 
 describe('<Card />', () => {
@@ -13,7 +14,7 @@ describe('<Card />', () => {
 
   const defaultCard = jest.fn(() => <div>Card title</div>);
 
-  function mount({ children = card, ...otherProps } = {}) {
+  function mount({ children = card, ...otherProps } = {} as any) {
     subject = render(
       <Card renderCard={defaultCard} {...otherProps}>
         {children}

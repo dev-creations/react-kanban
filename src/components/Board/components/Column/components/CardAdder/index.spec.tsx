@@ -1,5 +1,6 @@
+import React from 'react';
 import { render, fireEvent, screen } from '@testing-library/react';
-import CardAdder from './';
+import CardAdder from '.';
 
 describe('<CardAdder />', () => {
   let subject, onConfirm;

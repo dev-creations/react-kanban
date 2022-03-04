@@ -1,5 +1,6 @@
+import React from 'react';
 import { render, fireEvent, screen } from '@testing-library/react';
-import CardForm from './';
+import CardForm from '.';
 
 describe('<CardForm />', () => {
   let subject, onConfirm, onCancel;

@@ -1,5 +1,6 @@
+import React from 'react';
 import { render, fireEvent, screen } from '@testing-library/react';
-import ColumnForm from './';
+import ColumnForm from '.';
 
 describe('<ColumnForm />', () => {
   let subject, onConfirm, onCancel;

@@ -1,3 +1,4 @@
+import React from 'react';
 import { forwardRef } from 'react';
 import { Draggable } from 'react-beautiful-dnd';
 import Card from './components/Card';
@@ -5,7 +6,7 @@ import withDroppable from '../../../withDroppable';
 import CardAdder from './components/CardAdder';
 import { pickPropOut } from '@services/utils';
 
-const ColumnEmptyPlaceholder = forwardRef((props, ref) => (
+const ColumnEmptyPlaceholder = forwardRef<HTMLDivElement>((props, ref) => (
   <div ref={ref} style={{ minHeight: 'inherit', height: 'inherit' }} {...props} />
 ));
 

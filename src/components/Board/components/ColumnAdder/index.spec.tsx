@@ -1,5 +1,6 @@
+import React from 'react';
 import { render, fireEvent, screen } from '@testing-library/react';
-import ColumnAdder from './';
+import ColumnAdder from '.';
 
 describe('<ColumnAdder />', () => {
   let subject, onConfirm;

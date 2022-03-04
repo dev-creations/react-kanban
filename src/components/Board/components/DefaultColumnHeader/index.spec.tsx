@@ -1,5 +1,6 @@
+import React from 'react';
 import { render, fireEvent, screen } from '@testing-library/react';
-import DefaultColumnHeader from './';
+import DefaultColumnHeader from '.';
 
 describe('<DefaultColumnHeader />', () => {
   let subject;
@@ -27,7 +28,7 @@ describe('<DefaultColumnHeader />', () => {
   beforeEach(reset);
 
   it('renders a column header with the title', () => {
-    mount();
+    mount({});
     expect(screen.getByText('Column title')).toBeInTheDocument();
   });
 

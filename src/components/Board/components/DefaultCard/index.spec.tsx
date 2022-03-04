@@ -1,5 +1,6 @@
+import React from 'react';
 import { render, fireEvent, screen } from '@testing-library/react';
-import DefaultCard from './';
+import DefaultCard from '.';
 
 describe('<DefaultCard />', () => {
   let subject;
@@ -25,7 +26,7 @@ describe('<DefaultCard />', () => {
   beforeEach(reset);
 
   it('renders a card with its title and its description', () => {
-    mount();
+    mount({});
     expect(screen.queryByText('Card title')).toBeVisible();
     expect(screen.queryByText('Description')).toBeVisible();
   });
@@ -40,7 +41,7 @@ describe('<DefaultCard />', () => {
     });
 
     describe('when the component does not receive "dragging"', () => {
-      beforeEach(() => mount());
+      beforeEach(() => mount({}));
 
       it('does not apply the gray background color to the card', () => {
         expect(subject.container.querySelector('div')).not.toHaveClass('react-kanban-card--dragging');

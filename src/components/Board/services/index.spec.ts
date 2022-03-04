@@ -4,12 +4,12 @@ import {
   getCoordinates,
   isMovingAColumnToAnotherPosition,
   isMovingACardToAnotherPosition,
-} from './';
+} from '.';
 
 describe('#getCoordinates', () => {
   describe('when the event does not have destination', () => {
     it('returns empty object', () => {
-      expect(getCoordinates({ destination: null })).toEqual({});
+      expect(getCoordinates({ destination: null }, undefined)).toEqual({});
     });
   });
 
@@ -21,7 +21,7 @@ describe('#getCoordinates', () => {
     };
 
     it('returns the column coordinates', () => {
-      expect(getCoordinates(event)).toEqual({ destination: { toPosition: 1 }, source: { fromPosition: 0 } });
+      expect(getCoordinates(event, undefined)).toEqual({ destination: { toPosition: 1 }, source: { fromPosition: 0 } });
     });
   });
 

@@ -1,6 +1,7 @@
+import React from 'react';
 import { useState } from 'react';
 import { render, within, act, fireEvent, screen } from '@testing-library/react';
-import Board from './';
+import Board from '.';
 import { callbacks } from 'react-beautiful-dnd';
 import { moveCard } from '@services/helpers';
 
@@ -87,7 +88,7 @@ describe('<Board />', () => {
       describe('when the component receives "onCardDragEnd" callback', () => {
         beforeEach(() => {
           onCardDragEnd = jest.fn();
-          mount({ onCardDragEnd });
+          mount({ onCardDragEnd } as any);
         });
 
         describe('when the user cancels the card moving', () => {
@@ -141,7 +142,7 @@ describe('<Board />', () => {
       describe('when the component receives "onColumnDragEnd" callback', () => {
         beforeEach(() => {
           onColumnDragEnd = jest.fn();
-          mount({ onColumnDragEnd });
+          mount({ onColumnDragEnd } as any);
         });
 
         describe('when the user cancels the column moving', () => {
@@ -231,7 +232,7 @@ describe('<Board />', () => {
             </div>
           ));
 
-          mount({ children: board, renderCard });
+          mount({ children: board, renderCard } as any);
         });
 
         it("renders the custom cards on the board's column", () => {
@@ -274,7 +275,7 @@ describe('<Board />', () => {
             </div>
           ));
 
-          mount({ children: board, renderColumnHeader });
+          mount({ children: board, renderColumnHeader } as any);
         });
 
         it("renders the custom header on the board's column", () => {
@@ -294,7 +295,7 @@ describe('<Board />', () => {
       });
 
       describe('when the component does not receive a "renderColumnHeader" prop', () => {
-        beforeEach(() => mount({ children: board }));
+        beforeEach(() => mount({ children: board } as any));
 
         it("renders the default header on the board's column", () => {
           expect(screen.queryAllByTestId(/column/)).toHaveLength(1);
@@ -310,7 +311,7 @@ describe('<Board />', () => {
 
           beforeEach(() => {
             onNewColumnConfirm = jest.fn();
-            mount({ allowAddColumn: false, onNewColumnConfirm });
+            mount({ allowAddColumn: false, onNewColumnConfirm } as any);
           });
           afterEach(() => {
             onNewColumnConfirm = undefined;
@@ -323,7 +324,7 @@ describe('<Board />', () => {
 
         describe('when the component does not receive "onNewColumnConfirm" prop', () => {
           beforeEach(() => {
-            mount({ allowAddColumn: true });
+            mount({ allowAddColumn: true } as any);
           });
 
           it('does not render the column adder', () => {
@@ -336,7 +337,7 @@ describe('<Board />', () => {
 
           beforeEach(() => {
             onNewColumnConfirm = jest.fn();
-            mount({ allowAddColumn: true, onNewColumnConfirm });
+            mount({ allowAddColumn: true, onNewColumnConfirm } as any);
           });
           afterEach(() => {
             onNewColumnConfirm = undefined;
@@ -396,7 +397,7 @@ describe('<Board />', () => {
                 </div>
               ));
 
-              mount({ renderColumnAdder });
+              mount({ renderColumnAdder } as any);
             });
 
             it('does not render the custom render adder', () => {
@@ -412,7 +413,7 @@ describe('<Board />', () => {
                 </div>
               ));
 
-              mount({ children: board, renderColumnAdder, allowAddColumn: true });
+              mount({ children: board, renderColumnAdder, allowAddColumn: true } as any);
             });
 
             it('renders the custom column adder as the last column to add a new column', () => {
@@ -432,7 +433,7 @@ describe('<Board />', () => {
 
       describe('when the component uses the default header template', () => {
         describe('when the component receives the "allowRemoveColumn" prop', () => {
-          beforeEach(() => mount({ allowRemoveColumn: true, onColumnRemove }));
+          beforeEach(() => mount({ allowRemoveColumn: true, onColumnRemove } as any));
 
           it('does not call the "onColumnRemove callback', () => {
             expect(onColumnRemove).not.toHaveBeenCalled();
@@ -458,7 +459,7 @@ describe('<Board />', () => {
         beforeEach(() => {
           renderColumnHeader = jest.fn(({ title }) => <div>{title}</div>);
           onColumnRemove = jest.fn();
-          mount({ renderColumnHeader, onColumnRemove });
+          mount({ renderColumnHeader, onColumnRemove } as any);
         });
 
         it('does not call the "onColumnRemove" callback', () => {
@@ -472,7 +473,7 @@ describe('<Board />', () => {
         describe('when the component receives the "allowRenameColumn" prop', () => {
           beforeEach(() => {
             onColumnRename = jest.fn();
-            mount({ allowRenameColumn: true, onColumnRename });
+            mount({ allowRenameColumn: true, onColumnRename } as any);
           });
 
           it('does not call the "onColumnRename" callback', () => {
@@ -504,7 +505,7 @@ describe('<Board />', () => {
         describe('when the component does not receive the "allowRenameColumn" prop', () => {
           beforeEach(() => {
             onColumnRename = jest.fn();
-            mount({ onColumnRename });
+            mount({ onColumnRename } as any);
           });
 
           it('does not call the "onColumnRename" callback', () => {
@@ -521,7 +522,7 @@ describe('<Board />', () => {
         beforeEach(() => {
           const renderColumnHeader = ({ title }) => <div>{title}</div>;
           onColumnRename = jest.fn();
-          mount({ renderColumnHeader, onColumnRename });
+          mount({ renderColumnHeader, onColumnRename } as any);
         });
 
         it('does not call the "onColumnRename" callback', () => {
@@ -537,7 +538,7 @@ describe('<Board />', () => {
 
       describe('when the component uses the default card template', () => {
         describe('when the component receives the "allowRemoveCard" prop', () => {
-          beforeEach(() => mount({ allowRemoveCard: true, onCardRemove }));
+          beforeEach(() => mount({ allowRemoveCard: true, onCardRemove } as any));
 
           it('does not call the "onCardRemove" callback', () => {
             expect(onCardRemove).not.toHaveBeenCalled();
@@ -563,7 +564,7 @@ describe('<Board />', () => {
         beforeEach(() => {
           renderCard = jest.fn(({ title }) => <div>{title}</div>);
           onCardRemove = jest.fn();
-          mount({ renderCard, onCardRemove });
+          mount({ renderCard, onCardRemove } as any);
         });
 
         it('does not call the "onCardRemove" callback', () => {
@@ -636,7 +637,7 @@ describe('<Board />', () => {
       describe('when the component receives "onCardDragEnd" callback', () => {
         beforeEach(() => {
           onCardDragEnd = jest.fn();
-          mount({ onCardDragEnd });
+          mount({ onCardDragEnd } as any);
         });
 
         describe('when the user cancels the card moving', () => {
@@ -722,7 +723,7 @@ describe('<Board />', () => {
       describe('when the component receives "onColumnDragEnd" callback', () => {
         beforeEach(() => {
           onColumnDragEnd = jest.fn();
-          mount({ onColumnDragEnd });
+          mount({ onColumnDragEnd } as any);
         });
 
         describe('when the user cancels the column moving', () => {
@@ -845,7 +846,7 @@ describe('<Board />', () => {
             </div>
           ));
 
-          mount({ initialBoard: board, renderCard });
+          mount({ initialBoard: board, renderCard } as any);
         });
 
         it("renders the custom cards on the board's column", () => {
@@ -887,7 +888,7 @@ describe('<Board />', () => {
             </div>
           ));
 
-          mount({ initialBoard: board, renderColumnHeader });
+          mount({ initialBoard: board, renderColumnHeader } as any);
         });
 
         it("renders the custom header on the board's column", () => {
@@ -910,7 +911,7 @@ describe('<Board />', () => {
       });
 
       describe('when the component does not receive a "renderColumnHeader" prop', () => {
-        beforeEach(() => mount({ initialBoard: board }));
+        beforeEach(() => mount({ initialBoard: board } as any));
 
         it("renders the default header on the board's column", () => {
           expect(screen.queryAllByTestId(/column/)).toHaveLength(1);
@@ -927,7 +928,7 @@ describe('<Board />', () => {
           beforeEach(() => {
             onColumnNew = jest.fn();
             onNewColumnConfirm = jest.fn((column) => new Promise((resolve) => resolve({ id: 999, ...column })));
-            mount({ allowAddColumn: false, onNewColumnConfirm, onColumnNew });
+            mount({ allowAddColumn: false, onNewColumnConfirm, onColumnNew } as any);
           });
           afterEach(() => {
             onColumnNew = undefined;
@@ -941,7 +942,7 @@ describe('<Board />', () => {
 
         describe('when the component does not receive "onNewColumnConfirm" prop', () => {
           beforeEach(() => {
-            mount({ allowAddColumn: true });
+            mount({ allowAddColumn: true } as any);
           });
 
           it('does not render the column adder', () => {
@@ -955,7 +956,7 @@ describe('<Board />', () => {
           beforeEach(() => {
             onColumnNew = jest.fn();
             onNewColumnConfirm = jest.fn((column) => new Promise((resolve) => resolve({ id: 999, ...column })));
-            mount({ allowAddColumn: true, onNewColumnConfirm, onColumnNew });
+            mount({ allowAddColumn: true, onNewColumnConfirm, onColumnNew } as any);
           });
           afterEach(() => {
             onColumnNew = undefined;
@@ -1043,7 +1044,7 @@ describe('<Board />', () => {
                 </div>
               ));
 
-              mount({ renderColumnAdder });
+              mount({ renderColumnAdder } as any);
             });
 
             it('does not render the custom render adder', () => {
@@ -1060,7 +1061,7 @@ describe('<Board />', () => {
                 </div>
               ));
 
-              mount({ children: board, renderColumnAdder, allowAddColumn: true, onColumnNew });
+              mount({ children: board, renderColumnAdder, allowAddColumn: true, onColumnNew } as any);
             });
 
             it('renders the custom column adder as the last column to add a new column', () => {
@@ -1107,7 +1108,7 @@ describe('<Board />', () => {
 
       describe('when the component uses the default header template', () => {
         describe('when the component receives the "allowRemoveColumn" prop', () => {
-          beforeEach(() => mount({ allowRemoveColumn: true, onColumnRemove }));
+          beforeEach(() => mount({ allowRemoveColumn: true, onColumnRemove } as any));
 
           it('does not call the "onColumnRemove callback', () => {
             expect(onColumnRemove).not.toHaveBeenCalled();
@@ -1142,7 +1143,7 @@ describe('<Board />', () => {
         beforeEach(() => {
           renderColumnHeader = jest.fn(({ title }, { removeColumn }) => <div onClick={removeColumn}>{title}</div>);
           onColumnRemove = jest.fn();
-          mount({ renderColumnHeader, onColumnRemove });
+          mount({ renderColumnHeader, onColumnRemove } as any);
         });
 
         it('does not call the "onColumnRemove" callback', () => {
@@ -1181,7 +1182,7 @@ describe('<Board />', () => {
         describe('when the component receives the "allowRenameColumn" prop', () => {
           beforeEach(() => {
             onColumnRename = jest.fn();
-            mount({ allowRenameColumn: true, onColumnRename });
+            mount({ allowRenameColumn: true, onColumnRename } as any);
           });
 
           it('does not call the "onColumnRename" callback', () => {
@@ -1218,7 +1219,7 @@ describe('<Board />', () => {
         describe('when the component does not receive the "allowRenameColumn" prop', () => {
           beforeEach(() => {
             onColumnRename = jest.fn();
-            mount({ onColumnRename });
+            mount({ onColumnRename } as any);
           });
 
           it('does not call the "onColumnRename" callback', () => {
@@ -1237,7 +1238,7 @@ describe('<Board />', () => {
             <div onClick={() => renameColumn('New title')}>{title}</div>
           );
           onColumnRename = jest.fn();
-          mount({ renderColumnHeader, onColumnRename });
+          mount({ renderColumnHeader, onColumnRename } as any);
         });
 
         it('does not call the "onColumnRename" callback', () => {
@@ -1274,7 +1275,7 @@ describe('<Board />', () => {
 
       describe('when the component uses the default card template', () => {
         describe('when the component receives the "allowRemoveCard" prop', () => {
-          beforeEach(() => mount({ allowRemoveCard: true, onCardRemove }));
+          beforeEach(() => mount({ allowRemoveCard: true, onCardRemove } as any));
 
           it('does not call the "onCardRemove" callback', () => {
             expect(onCardRemove).not.toHaveBeenCalled();
@@ -1316,7 +1317,7 @@ describe('<Board />', () => {
         beforeEach(() => {
           renderCard = jest.fn(({ title }, { removeCard }) => <div onClick={removeCard}>{title}</div>);
           onCardRemove = jest.fn();
-          mount({ renderCard, onCardRemove });
+          mount({ renderCard, onCardRemove } as any);
         });
 
         it('does not call the "onCardRemove" callback', () => {
@@ -1370,12 +1371,12 @@ describe('<Board />', () => {
         });
 
         it('does not call the "onCardNew" callback', () => {
-          mount({ renderColumnHeader, onCardNew });
+          mount({ renderColumnHeader, onCardNew } as any);
           expect(onCardNew).not.toHaveBeenCalled();
         });
 
         it('passes the column and the column bag to the "renderColumnHeader"', () => {
-          mount({ renderColumnHeader, onCardNew });
+          mount({ renderColumnHeader, onCardNew } as any);
           expect(renderColumnHeader).toHaveBeenCalledWith(
             expect.objectContaining({ id: 1, title: 'Column Backlog' }),
             expect.objectContaining({
@@ -1389,7 +1390,7 @@ describe('<Board />', () => {
         describe('when the "addCard" callback is called', () => {
           describe('when the position is not specified', () => {
             beforeEach(() => {
-              mount({ renderColumnHeader, onCardNew });
+              mount({ renderColumnHeader, onCardNew } as any);
               fireEvent.click(within(screen.queryByTestId('column-1')).queryByText('New card'));
             });
 
@@ -1423,7 +1424,7 @@ describe('<Board />', () => {
               const renderColumnHeader = jest.fn((_, { addCard }) => {
                 return <button onClick={() => addCard({ id: 99, title: 'New card' }, { on: 'top' })}>New card</button>;
               });
-              mount({ renderColumnHeader, onCardNew });
+              mount({ renderColumnHeader, onCardNew } as any);
               fireEvent.click(within(screen.queryByTestId('column-1')).queryByText('New card'));
             });
 
@@ -1459,7 +1460,7 @@ describe('<Board />', () => {
                   <button onClick={() => addCard({ id: 99, title: 'New card' }, { on: 'bottom' })}>New card</button>
                 );
               });
-              mount({ renderColumnHeader, onCardNew });
+              mount({ renderColumnHeader, onCardNew } as any);
               fireEvent.click(within(screen.queryByTestId('column-1')).queryByText('New card'));
             });
 
@@ -1496,7 +1497,7 @@ describe('<Board />', () => {
 
         describe('when the component does not receive "allowAddCard" prop', () => {
           beforeEach(() => {
-            mount({ allowAddCard: false, onNewCardConfirm, onCardNew });
+            mount({ allowAddCard: false, onNewCardConfirm, onCardNew } as any);
           });
 
           it('does not render the card adder', () => {
@@ -1506,7 +1507,7 @@ describe('<Board />', () => {
 
         describe('when the component does not receive the "onNewCardConfirm" prop', () => {
           beforeEach(() => {
-            mount({ allowAddCard: true, onCardNew: () => {} });
+            mount({ allowAddCard: true, onCardNew: () => {} } as any);
           });
 
           it('does not render the column adder', () => {
@@ -1517,7 +1518,7 @@ describe('<Board />', () => {
         describe('when the component receives both the "allowAddCard" and "onNewCardConfirm" props', () => {
           describe('when the user adds a new card', () => {
             beforeEach(async () => {
-              mount({ allowAddCard: true, onNewCardConfirm, onCardNew });
+              mount({ allowAddCard: true, onNewCardConfirm, onCardNew } as any);
 
               fireEvent.click(screen.queryAllByText('+')[0]);
               fireEvent.change(subject.container.querySelector('input[name="title"]'), {
@@ -1612,7 +1613,7 @@ describe('<Board />', () => {
           describe('about the card position when it is added', () => {
             describe('when the position is not specified', () => {
               beforeEach(async () => {
-                mount({ allowAddCard: true, onNewCardConfirm, onCardNew });
+                mount({ allowAddCard: true, onNewCardConfirm, onCardNew } as any);
                 fireEvent.click(screen.queryAllByText('+')[0]);
 
                 fireEvent.change(subject.container.querySelector('input[name="title"]'), {
@@ -1690,7 +1691,7 @@ describe('<Board />', () => {
 
             describe('when the position is specified to add the card on the top of the column', () => {
               beforeEach(async () => {
-                mount({ allowAddCard: { on: 'top' }, onNewCardConfirm, onCardNew });
+                mount({ allowAddCard: { on: 'top' }, onNewCardConfirm, onCardNew } as any);
                 fireEvent.click(screen.queryAllByText('+')[0]);
 
                 fireEvent.change(subject.container.querySelector('input[name="title"]'), {
@@ -1768,7 +1769,7 @@ describe('<Board />', () => {
 
             describe('when the position is specified to add the card on the bottom of the column', () => {
               beforeEach(async () => {
-                mount({ allowAddCard: { on: 'bottom' }, onNewCardConfirm, onCardNew });
+                mount({ allowAddCard: { on: 'bottom' }, onNewCardConfirm, onCardNew } as any);
                 fireEvent.click(screen.queryAllByText('+')[0]);
 
                 fireEvent.change(subject.container.querySelector('input[name="title"]'), {

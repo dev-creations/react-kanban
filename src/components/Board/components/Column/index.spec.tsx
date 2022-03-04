@@ -1,5 +1,6 @@
+import React from 'react';
 import { render, fireEvent, screen } from '@testing-library/react';
-import Column from './';
+import Column from '.';
 
 describe('<Column />', () => {
   let subject;
@@ -23,7 +24,7 @@ describe('<Column />', () => {
     ],
   };
 
-  function mount({ children = column, ...otherProps } = {}) {
+  function mount({ children = column, ...otherProps } = {} as any) {
     subject = render(
       <Column {...otherProps} renderColumnHeader={() => <div>Backlog</div>} renderCard={renderCard}>
         {children}

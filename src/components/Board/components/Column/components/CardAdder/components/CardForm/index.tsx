@@ -1,9 +1,10 @@
+import React from 'react';
 import { useRef } from 'react';
 import { when } from '@services/utils';
 
 function CardForm({ onConfirm, onCancel }) {
-  const inputCardTitle = useRef();
-  const inputCardDescription = useRef();
+  const inputCardTitle = useRef<HTMLInputElement>(null);
+  const inputCardDescription = useRef<HTMLInputElement>(null);
 
   function addCard(event) {
     event.preventDefault();

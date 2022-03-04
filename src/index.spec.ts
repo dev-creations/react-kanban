@@ -1,13 +1,4 @@
-import Board, {
-  moveColumn,
-  moveCard,
-  addColumn,
-  removeColumn,
-  changeColumn,
-  addCard,
-  removeCard,
-  changeCard,
-} from './';
+import Board, { moveColumn, moveCard, addColumn, removeColumn, changeColumn, addCard, removeCard, changeCard } from '.';
 
 it('exports the Component and the helpers', () => {
   expect(Board).toEqual(expect.any(Function));
