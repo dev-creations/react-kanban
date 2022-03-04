@@ -1,12 +1,13 @@
 {
   "name": "@dev-creations/react-kanban",
-  "version": "2.2.0",
+  "version": "3.0.0",
   "description": "Yet another Kanban/Trello board lib for React.",
   "main": "dist/index.js",
   "files": [
     "dist/index.js",
     "dist/styles.css"
   ],
+  "types": "dist/index.d.ts",
   "repository": "https://github.com/dev-creations/react-kanban",
   "author": "Leandro Lourenci",
   "license": "MIT",
