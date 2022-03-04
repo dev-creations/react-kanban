@@ -4,8 +4,7 @@
   "description": "Yet another Kanban/Trello board lib for React.",
   "main": "dist/index.js",
   "files": [
-    "dist/index.js",
-    "dist/styles.css"
+    "dist/**/*"
   ],
   "types": "dist/index.d.ts",
   "repository": "https://github.com/dev-creations/react-kanban",
