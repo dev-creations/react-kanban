@@ -1,15 +1,15 @@
-import { useRef } from 'react'
-import { when } from '@services/utils'
+import { useRef } from 'react';
+import { when } from '@services/utils';
 
 function CardForm({ onConfirm, onCancel }) {
-  const inputCardTitle = useRef()
-  const inputCardDescription = useRef()
+  const inputCardTitle = useRef();
+  const inputCardDescription = useRef();
 
   function addCard(event) {
-    event.preventDefault()
+    event.preventDefault();
     when(inputCardTitle.current.value)((value) => {
-      onConfirm({ title: value, description: inputCardDescription.current.value })
-    })
+      onConfirm({ title: value, description: inputCardDescription.current.value });
+    });
   }
 
   return (
@@ -38,7 +38,7 @@ function CardForm({ onConfirm, onCancel }) {
         </div>
       </form>
     </div>
-  )
+  );
 }
 
-export default CardForm
+export default CardForm;

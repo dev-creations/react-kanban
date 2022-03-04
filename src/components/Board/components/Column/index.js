@@ -1,15 +1,15 @@
-import { forwardRef } from 'react'
-import { Draggable } from 'react-beautiful-dnd'
-import Card from './components/Card'
-import withDroppable from '../../../withDroppable'
-import CardAdder from './components/CardAdder'
-import { pickPropOut } from '@services/utils'
+import { forwardRef } from 'react';
+import { Draggable } from 'react-beautiful-dnd';
+import Card from './components/Card';
+import withDroppable from '../../../withDroppable';
+import CardAdder from './components/CardAdder';
+import { pickPropOut } from '@services/utils';
 
 const ColumnEmptyPlaceholder = forwardRef((props, ref) => (
   <div ref={ref} style={{ minHeight: 'inherit', height: 'inherit' }} {...props} />
-))
+));
 
-const DroppableColumn = withDroppable(ColumnEmptyPlaceholder)
+const DroppableColumn = withDroppable(ColumnEmptyPlaceholder);
 
 function Column({
   children,
@@ -24,7 +24,7 @@ function Column({
   return (
     <Draggable draggableId={`column-draggable-${children.id}`} index={columnIndex} isDragDisabled={disableColumnDrag}>
       {(columnProvided) => {
-        const draggablePropsWithoutStyle = pickPropOut(columnProvided.draggableProps, 'style')
+        const draggablePropsWithoutStyle = pickPropOut(columnProvided.draggableProps, 'style');
 
         return (
           <div
@@ -59,10 +59,10 @@ function Column({
               )}
             </DroppableColumn>
           </div>
-        )
+        );
       }}
     </Draggable>
-  )
+  );
 }
 
-export default Column
+export default Column;

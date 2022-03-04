@@ -1,4 +1,4 @@
-import { Draggable } from 'react-beautiful-dnd'
+import { Draggable } from 'react-beautiful-dnd';
 
 function Card({ children, index, renderCard, disableCardDrag }) {
   return (
@@ -13,10 +13,10 @@ function Card({ children, index, renderCard, disableCardDrag }) {
           >
             <div style={{ display: 'inline-block', whiteSpace: 'normal' }}>{renderCard(isDragging)}</div>
           </div>
-        )
+        );
       }}
     </Draggable>
-  )
+  );
 }
 
-export default Card
+export default Card;

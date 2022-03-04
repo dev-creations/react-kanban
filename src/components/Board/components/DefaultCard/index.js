@@ -13,5 +13,5 @@ export default function ({ children: card, dragging, allowRemoveCard, onCardRemo
       </span>
       <div className='react-kanban-card__description'>{card.description}</div>
     </div>
-  )
+  );
 }

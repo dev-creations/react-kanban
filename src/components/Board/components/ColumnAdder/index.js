@@ -1,12 +1,12 @@
-import { useState } from 'react'
-import ColumnForm from './components/ColumnForm'
+import { useState } from 'react';
+import ColumnForm from './components/ColumnForm';
 
 function ColumnAdder({ onConfirm }) {
-  const [isAddingColumn, setAddingColumn] = useState(false)
+  const [isAddingColumn, setAddingColumn] = useState(false);
 
   function confirmColumn(title) {
-    onConfirm(title)
-    setAddingColumn(false)
+    onConfirm(title);
+    setAddingColumn(false);
   }
 
   return isAddingColumn ? (
@@ -20,7 +20,7 @@ function ColumnAdder({ onConfirm }) {
     >
       ➕
     </div>
-  )
+  );
 }
 
-export default ColumnAdder
+export default ColumnAdder;

@@ -1,8 +1,9 @@
 module.exports = {
   collectCoverage: true,
-  collectCoverageFrom: ['src/**', '!src/index.js'],
+  collectCoverageFrom: ['src/**/*.js', '!src/index.js'],
   coverageDirectory: 'coverage',
   testMatch: ['<rootDir>/src/**/*.spec.js'],
+  testEnvironment: 'jsdom',
   setupFilesAfterEnv: ['@testing-library/jest-dom/extend-expect'],
   testRunner: 'jest-circus/runner',
   moduleNameMapper: {
@@ -10,4 +11,4 @@ module.exports = {
     '^@components/(.*)$': '<rootDir>/src/components/$1',
     '\\.s?css$': 'identity-obj-proxy',
   },
-}
+};

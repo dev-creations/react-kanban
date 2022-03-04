@@ -1,4 +1,4 @@
-import { Droppable } from 'react-beautiful-dnd'
+import { Droppable } from 'react-beautiful-dnd';
 
 function withDroppable(Component) {
   return function WrapperComponent({ children, ...droppableProps }) {
@@ -11,8 +11,8 @@ function withDroppable(Component) {
           </Component>
         )}
       </Droppable>
-    )
-  }
+    );
+  };
 }
 
-export default withDroppable
+export default withDroppable;

@@ -1,14 +1,14 @@
-import { createRef } from 'react'
-import { when } from '@services/utils'
+import { createRef } from 'react';
+import { when } from '@services/utils';
 
 function ColumnForm({ onConfirm, onCancel }) {
   // FIXME use hook
-  const inputColumnTitle = createRef()
+  const inputColumnTitle = createRef();
 
   function addColumn(event) {
-    event.preventDefault()
+    event.preventDefault();
 
-    when(inputColumnTitle.current.value)(onConfirm)
+    when(inputColumnTitle.current.value)(onConfirm);
   }
 
   return (
@@ -21,7 +21,7 @@ function ColumnForm({ onConfirm, onCancel }) {
         </button>
       </form>
     </div>
-  )
+  );
 }
 
-export default ColumnForm
+export default ColumnForm;

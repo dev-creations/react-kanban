@@ -1,13 +1,13 @@
-import { useState } from 'react'
-import CardForm from './components/CardForm'
+import { useState } from 'react';
+import CardForm from './components/CardForm';
 
 export default function CardAdder({ column, onConfirm }) {
   function confirmCard(card) {
-    onConfirm(column, card)
-    setAddingCard(false)
+    onConfirm(column, card);
+    setAddingCard(false);
   }
 
-  const [addingCard, setAddingCard] = useState(false)
+  const [addingCard, setAddingCard] = useState(false);
 
   return (
     <>
@@ -19,5 +19,5 @@ export default function CardAdder({ column, onConfirm }) {
         </button>
       )}
     </>
-  )
+  );
 }

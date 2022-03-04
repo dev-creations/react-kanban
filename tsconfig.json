@@ -10,7 +10,8 @@
     "paths": {
       "@components/*": ["src/components/*"],
       "@services/*": ["src/services/*"]
-    }
+    },
+    "outDir": "./dist"
   },
   "include": ["src/**/*"]
 }

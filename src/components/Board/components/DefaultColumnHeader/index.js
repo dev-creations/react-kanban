@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState } from 'react';
 
 function ColumnTitle({ allowRenameColumn, onClick, children: title }) {
   return allowRenameColumn ? (
@@ -7,33 +7,33 @@ function ColumnTitle({ allowRenameColumn, onClick, children: title }) {
     </span>
   ) : (
     <span>{title}</span>
-  )
+  );
 }
 
 function useRenameMode(state) {
-  const [renameMode, setRenameMode] = useState(state)
+  const [renameMode, setRenameMode] = useState(state);
 
   function toggleRenameMode() {
-    setRenameMode(!renameMode)
+    setRenameMode(!renameMode);
   }
 
-  return [renameMode, toggleRenameMode]
+  return [renameMode, toggleRenameMode];
 }
 
 export default function ({ children: column, allowRemoveColumn, onColumnRemove, allowRenameColumn, onColumnRename }) {
-  const [renameMode, toggleRenameMode] = useRenameMode(false)
-  const [titleInput, setTitleInput] = useState('')
+  const [renameMode, toggleRenameMode] = useRenameMode(false);
+  const [titleInput, setTitleInput] = useState('');
 
   function handleRenameColumn(event) {
-    event.preventDefault()
+    event.preventDefault();
 
-    onColumnRename(column, titleInput)
-    toggleRenameMode()
+    onColumnRename(column, titleInput);
+    toggleRenameMode();
   }
 
   function handleRenameMode() {
-    setTitleInput(column.title)
-    toggleRenameMode()
+    setTitleInput(column.title);
+    toggleRenameMode();
   }
 
   return (
@@ -66,5 +66,5 @@ export default function ({ children: column, allowRemoveColumn, onColumnRemove, 
         </>
       )}
     </div>
-  )
+  );
 }
