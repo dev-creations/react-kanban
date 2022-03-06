@@ -1,38 +1,37 @@
-import React from 'react';
-import { useState } from 'react';
-import { render, within, act, fireEvent, screen } from '@testing-library/react';
-import Board from '.';
-import { callbacks } from 'react-beautiful-dnd';
-import { moveCard } from '@services/helpers';
+import React, { useState } from "react";
+import { render, within, act, fireEvent, screen } from "@testing-library/react";
+import Board from ".";
+import { callbacks } from "react-beautiful-dnd";
+import { moveCard } from "@services/helpers";
 
-describe('<Board />', () => {
+describe("<Board />", () => {
   let subject, onCardDragEnd, onColumnDragEnd, onColumnRemove, onColumnRename, onCardRemove;
   const board = {
     columns: [
       {
         id: 1,
-        title: 'Column Backlog',
+        title: "Column Backlog",
         cards: [
           {
             id: 1,
-            title: 'Card title 1',
-            description: 'Card content',
+            title: "Card title 1",
+            description: "Card content",
           },
           {
             id: 2,
-            title: 'Card title 2',
-            description: 'Card content',
+            title: "Card title 2",
+            description: "Card content",
           },
         ],
       },
       {
         id: 2,
-        title: 'Column Doing',
+        title: "Column Doing",
         cards: [
           {
             id: 3,
-            title: 'Card title 3',
-            description: 'Card content',
+            title: "Card title 3",
+            description: "Card content",
           },
         ],
       },
@@ -44,13 +43,13 @@ describe('<Board />', () => {
     subject = onCardDragEnd = onColumnDragEnd = onColumnRemove = onCardRemove = undefined;
   });
 
-  describe('when the board is controlled', () => {
-    function ControlledBoard({ children, ...props }) {
+  describe("when the board is controlled", () => {
+    function ControlledBoard({ children, ...props }: any) {
       const [board, setBoard] = useState(children);
 
-      function handleCardMoving() {
+      const handleCardMoving = () => {
         setBoard(moveCard(board, { fromPosition: 0, fromColumnId: 1 }, { toPosition: 1, toColumnId: 1 }));
-      }
+      };
 
       return (
         <>
@@ -65,17 +64,17 @@ describe('<Board />', () => {
       return subject;
     }
 
-    it('renders a board according to the children prop', () => {
+    it("renders a board according to the children prop", () => {
       mount();
 
-      const column = within(screen.queryByTestId('column-1'));
+      const column = within(screen.queryByTestId("column-1"));
       const cards = column.queryAllByText(/^Card title/);
 
       expect(cards).toHaveLength(2);
       expect(cards[0]).toHaveTextContent(/^Card title 1$/);
       expect(cards[1]).toHaveTextContent(/^Card title 2$/);
 
-      fireEvent.click(screen.queryByText('Move card', { selector: 'button' }));
+      fireEvent.click(screen.queryByText("Move card", { selector: "button" }));
 
       const movedCards = column.queryAllByText(/^Card title/);
 
@@ -84,52 +83,52 @@ describe('<Board />', () => {
       expect(movedCards[1]).toHaveTextContent(/^Card title 1$/);
     });
 
-    describe('about the card moving', () => {
+    describe("about the card moving", () => {
       describe('when the component receives "onCardDragEnd" callback', () => {
         beforeEach(() => {
           onCardDragEnd = jest.fn();
           mount({ onCardDragEnd } as any);
         });
 
-        describe('when the user cancels the card moving', () => {
+        describe("when the user cancels the card moving", () => {
           beforeEach(() => {
             callbacks.onDragEnd({ source: null, destination: null });
           });
 
-          it('does not call onCardDragEnd callback', () => {
+          it("does not call onCardDragEnd callback", () => {
             expect(onCardDragEnd).not.toHaveBeenCalled();
           });
         });
 
-        describe('whe the user moves a card to the same position', () => {
+        describe("whe the user moves a card to the same position", () => {
           beforeEach(() => {
             act(() => {
               callbacks.onDragEnd({
-                source: { droppableId: '1', index: 0 },
-                destination: { droppableId: '1', index: 0 },
+                source: { droppableId: "1", index: 0 },
+                destination: { droppableId: "1", index: 0 },
               });
             });
           });
 
-          it('does not call onCardDragEnd callback', () => {
+          it("does not call onCardDragEnd callback", () => {
             expect(onCardDragEnd).not.toHaveBeenCalled();
           });
         });
 
-        describe('when the user moves a card to another position', () => {
+        describe("when the user moves a card to another position", () => {
           beforeEach(() => {
             act(() => {
               callbacks.onDragEnd({
-                source: { droppableId: '1', index: 0 },
-                destination: { droppableId: '1', index: 1 },
+                source: { droppableId: "1", index: 0 },
+                destination: { droppableId: "1", index: 1 },
               });
             });
           });
 
-          it('calls the onCardDragEnd callback passing the card and the move coordinates', () => {
+          it("calls the onCardDragEnd callback passing the card and the move coordinates", () => {
             expect(onCardDragEnd).toHaveBeenCalledTimes(1);
             expect(onCardDragEnd).toHaveBeenCalledWith(
-              { id: 1, description: 'Card content', title: 'Card title 1' },
+              { id: 1, description: "Card content", title: "Card title 1" },
               { fromPosition: 0, fromColumnId: 1 },
               { toPosition: 1, toColumnId: 1 }
             );
@@ -138,46 +137,46 @@ describe('<Board />', () => {
       });
     });
 
-    describe('about the column moving', () => {
+    describe("about the column moving", () => {
       describe('when the component receives "onColumnDragEnd" callback', () => {
         beforeEach(() => {
           onColumnDragEnd = jest.fn();
           mount({ onColumnDragEnd } as any);
         });
 
-        describe('when the user cancels the column moving', () => {
+        describe("when the user cancels the column moving", () => {
           beforeEach(() => {
-            callbacks.onDragEnd({ source: null, destination: null, type: 'BOARD' });
+            callbacks.onDragEnd({ source: null, destination: null, type: "BOARD" });
           });
 
-          it('does not call onColumnDragEnd callback', () => {
+          it("does not call onColumnDragEnd callback", () => {
             expect(onColumnDragEnd).not.toHaveBeenCalled();
           });
         });
 
-        describe('when the user moves a column to same position', () => {
+        describe("when the user moves a column to same position", () => {
           beforeEach(() => {
             act(() => {
-              callbacks.onDragEnd({ source: { index: 0 }, destination: { index: 0 }, type: 'BOARD' });
+              callbacks.onDragEnd({ source: { index: 0 }, destination: { index: 0 }, type: "BOARD" });
             });
           });
 
-          it('does not call onColumnDragEnd callback', () => {
+          it("does not call onColumnDragEnd callback", () => {
             expect(onColumnDragEnd).not.toHaveBeenCalled();
           });
         });
 
-        describe('when the user moves a column to another position', () => {
+        describe("when the user moves a column to another position", () => {
           beforeEach(() => {
             act(() => {
-              callbacks.onDragEnd({ source: { index: 0 }, destination: { index: 1 }, type: 'BOARD' });
+              callbacks.onDragEnd({ source: { index: 0 }, destination: { index: 1 }, type: "BOARD" });
             });
           });
 
-          it('calls the onColumnDragEnd callback passing the column and the move coordinates', () => {
+          it("calls the onColumnDragEnd callback passing the column and the move coordinates", () => {
             expect(onColumnDragEnd).toHaveBeenCalledTimes(1);
             expect(onColumnDragEnd).toHaveBeenCalledWith(
-              expect.objectContaining({ title: 'Column Backlog' }),
+              expect.objectContaining({ title: "Column Backlog" }),
               { fromPosition: 0 },
               { toPosition: 1 }
             );
@@ -192,28 +191,28 @@ describe('<Board />', () => {
         columns: [
           {
             id: 1,
-            title: 'Column Backlog',
+            title: "Column Backlog",
             cards: [
               {
                 id: 1,
-                title: 'Card title',
-                content: 'Card content',
+                title: "Card title",
+                content: "Card content",
               },
               {
                 id: 2,
-                title: 'Card title',
-                content: 'Card content',
+                title: "Card title",
+                content: "Card content",
               },
             ],
           },
           {
             id: 2,
-            title: 'Column Doing',
+            title: "Column Doing",
             cards: [
               {
                 id: 3,
-                title: 'Card title',
-                content: 'Card content',
+                title: "Card title",
+                content: "Card content",
               },
             ],
           },
@@ -241,9 +240,9 @@ describe('<Board />', () => {
         });
 
         // FIXME It shouldn't be receiving the bag, just the dragging prop?! Maybe, just a typo in spec.
-        it('passes the card content and the card bag as a parameter to the renderCard prop', () => {
+        it("passes the card content and the card bag as a parameter to the renderCard prop", () => {
           expect(renderCard).toHaveBeenCalledWith(
-            { id: 1, title: 'Card title', content: 'Card content' },
+            { id: 1, title: "Card title", content: "Card content" },
             { dragging: false }
           );
         });
@@ -256,9 +255,9 @@ describe('<Board />', () => {
         columns: [
           {
             id: 1,
-            title: 'Column Backlog',
+            title: "Column Backlog",
             wip: 1,
-            cards: [{ id: 2, title: 'Card title', content: 'Card content' }],
+            cards: [{ id: 2, title: "Card title", content: "Card content" }],
           },
         ],
       };
@@ -280,16 +279,16 @@ describe('<Board />', () => {
 
         it("renders the custom header on the board's column", () => {
           expect(screen.queryAllByTestId(/column/)).toHaveLength(1);
-          expect(screen.queryByTestId('column-1')).toHaveTextContent(/Column Backlog \(1\)/);
+          expect(screen.queryByTestId("column-1")).toHaveTextContent(/Column Backlog \(1\)/);
         });
 
         it('passes the column content to the "renderColumnHeader" prop', () => {
           expect(renderColumnHeader).toHaveBeenCalledTimes(1);
           expect(renderColumnHeader).toHaveBeenCalledWith({
             id: 1,
-            title: 'Column Backlog',
+            title: "Column Backlog",
             wip: 1,
-            cards: [{ id: 2, title: 'Card title', content: 'Card content' }],
+            cards: [{ id: 2, title: "Card title", content: "Card content" }],
           });
         });
       });
@@ -299,13 +298,13 @@ describe('<Board />', () => {
 
         it("renders the default header on the board's column", () => {
           expect(screen.queryAllByTestId(/column/)).toHaveLength(1);
-          expect(screen.queryByTestId('column-1')).toHaveTextContent(/Column Backlog/);
+          expect(screen.queryByTestId("column-1")).toHaveTextContent(/Column Backlog/);
         });
       });
     });
 
-    describe('about the column adding', () => {
-      describe('about the default column adder', () => {
+    describe("about the column adding", () => {
+      describe("about the default column adder", () => {
         describe('when the component does not receive "allowAddColumn" prop', () => {
           let onNewColumnConfirm;
 
@@ -317,8 +316,8 @@ describe('<Board />', () => {
             onNewColumnConfirm = undefined;
           });
 
-          it('does not render the column adder', () => {
-            expect(screen.queryByText('➕')).not.toBeInTheDocument();
+          it("does not render the column adder", () => {
+            expect(screen.queryByText("➕")).not.toBeInTheDocument();
           });
         });
 
@@ -327,8 +326,8 @@ describe('<Board />', () => {
             mount({ allowAddColumn: true } as any);
           });
 
-          it('does not render the column adder', () => {
-            expect(screen.queryByText('➕')).not.toBeInTheDocument();
+          it("does not render the column adder", () => {
+            expect(screen.queryByText("➕")).not.toBeInTheDocument();
           });
         });
 
@@ -343,38 +342,38 @@ describe('<Board />', () => {
             onNewColumnConfirm = undefined;
           });
 
-          it('renders the column placeholder as the last column to add a new column', () => {
-            expect(screen.getByText('➕')).toBeInTheDocument();
+          it("renders the column placeholder as the last column to add a new column", () => {
+            expect(screen.getByText("➕")).toBeInTheDocument();
           });
 
-          describe('when the user clicks to add a new column', () => {
-            beforeEach(() => fireEvent.click(screen.queryByText('➕')));
+          describe("when the user clicks to add a new column", () => {
+            beforeEach(() => fireEvent.click(screen.queryByText("➕")));
 
-            it('hides the column placeholder', () => {
-              expect(screen.queryByText('➕')).not.toBeInTheDocument();
+            it("hides the column placeholder", () => {
+              expect(screen.queryByText("➕")).not.toBeInTheDocument();
             });
 
-            it('renders the input asking for a column title', () => {
-              expect(subject.container.querySelector('input')).toBeInTheDocument();
+            it("renders the input asking for a column title", () => {
+              expect(subject.container.querySelector("input")).toBeInTheDocument();
             });
 
-            describe('when the user confirms the new column', () => {
+            describe("when the user confirms the new column", () => {
               beforeEach(() => {
-                fireEvent.change(subject.container.querySelector('input'), {
-                  target: { value: 'Column Added by user' },
+                fireEvent.change(subject.container.querySelector("input"), {
+                  target: { value: "Column Added by user" },
                 });
-                fireEvent.click(screen.queryByText('Add'));
+                fireEvent.click(screen.queryByText("Add"));
               });
 
               it('calls the "onNewColumnConfirm" passing the new column', () => {
                 expect(onNewColumnConfirm).toHaveBeenCalledTimes(1);
-                expect(onNewColumnConfirm).toHaveBeenCalledWith({ title: 'Column Added by user', cards: [] });
+                expect(onNewColumnConfirm).toHaveBeenCalledWith({ title: "Column Added by user", cards: [] });
               });
             });
 
-            describe('when the user cancels the new column adding', () => {
+            describe("when the user cancels the new column adding", () => {
               beforeEach(() => {
-                fireEvent.click(screen.queryByText('Cancel'));
+                fireEvent.click(screen.queryByText("Cancel"));
               });
 
               it('does not call the "onNewColumnConfirm" passing the new column', () => {
@@ -385,8 +384,8 @@ describe('<Board />', () => {
         });
       });
 
-      describe('about custom column adder', () => {
-        describe('when the component receives a custom column adder', () => {
+      describe("about custom column adder", () => {
+        describe("when the component receives a custom column adder", () => {
           let renderColumnAdder;
 
           describe('when the component does not receive "allowAddColumn" prop', () => {
@@ -400,8 +399,8 @@ describe('<Board />', () => {
               mount({ renderColumnAdder } as any);
             });
 
-            it('does not render the custom render adder', () => {
-              expect(screen.queryByTestId('columnAdder')).not.toBeInTheDocument();
+            it("does not render the custom render adder", () => {
+              expect(screen.queryByTestId("columnAdder")).not.toBeInTheDocument();
             });
           });
 
@@ -416,8 +415,8 @@ describe('<Board />', () => {
               mount({ children: board, renderColumnAdder, allowAddColumn: true } as any);
             });
 
-            it('renders the custom column adder as the last column to add a new column', () => {
-              expect(screen.getByTestId('columnAdder')).toBeInTheDocument();
+            it("renders the custom column adder as the last column to add a new column", () => {
+              expect(screen.getByTestId("columnAdder")).toBeInTheDocument();
             });
 
             // TODO it needs spec for the renderColumnAdder callback
@@ -426,12 +425,12 @@ describe('<Board />', () => {
       });
     });
 
-    describe('about the column removing', () => {
+    describe("about the column removing", () => {
       beforeEach(() => {
         onColumnRemove = jest.fn();
       });
 
-      describe('when the component uses the default header template', () => {
+      describe("when the component uses the default header template", () => {
         describe('when the component receives the "allowRemoveColumn" prop', () => {
           beforeEach(() => mount({ allowRemoveColumn: true, onColumnRemove } as any));
 
@@ -439,9 +438,9 @@ describe('<Board />', () => {
             expect(onColumnRemove).not.toHaveBeenCalled();
           });
 
-          describe('when the user clicks to remove a column', () => {
+          describe("when the user clicks to remove a column", () => {
             beforeEach(() => {
-              const removeColumnButton = within(screen.queryByTestId('column-1')).queryByText('×');
+              const removeColumnButton = within(screen.queryByTestId("column-1")).queryByText("×");
               fireEvent.click(removeColumnButton);
             });
 
@@ -453,7 +452,7 @@ describe('<Board />', () => {
         });
       });
 
-      describe('when the component receives a custom header column template', () => {
+      describe("when the component receives a custom header column template", () => {
         let renderColumnHeader;
 
         beforeEach(() => {
@@ -468,8 +467,8 @@ describe('<Board />', () => {
       });
     });
 
-    describe('about the column renaming', () => {
-      describe('when the component use the default header template', () => {
+    describe("about the column renaming", () => {
+      describe("when the component use the default header template", () => {
         describe('when the component receives the "allowRenameColumn" prop', () => {
           beforeEach(() => {
             onColumnRename = jest.fn();
@@ -480,23 +479,23 @@ describe('<Board />', () => {
             expect(onColumnRename).not.toHaveBeenCalled();
           });
 
-          describe('when the user renames a column', () => {
+          describe("when the user renames a column", () => {
             beforeEach(() => {
-              fireEvent.click(within(screen.queryByTestId('column-1')).queryByText('Column Backlog'));
-              fireEvent.change(subject.container.querySelector('input'), { target: { value: 'New title' } });
-              fireEvent.click(screen.queryByText('Rename', { selector: 'button' }));
+              fireEvent.click(within(screen.queryByTestId("column-1")).queryByText("Column Backlog"));
+              fireEvent.change(subject.container.querySelector("input"), { target: { value: "New title" } });
+              fireEvent.click(screen.queryByText("Rename", { selector: "button" }));
             });
 
-            it('does not rename the column', () => {
-              expect(screen.getByText('Column Backlog')).toBeInTheDocument();
-              expect(screen.queryByText('New title')).not.toBeInTheDocument();
+            it("does not rename the column", () => {
+              expect(screen.getByText("Column Backlog")).toBeInTheDocument();
+              expect(screen.queryByText("New title")).not.toBeInTheDocument();
             });
 
             it('calls the "onColumnRename" callback passing the column to be renamed', () => {
               expect(onColumnRename).toHaveBeenCalledTimes(1);
               expect(onColumnRename).toHaveBeenCalledWith(
-                expect.objectContaining({ id: 1, title: 'Column Backlog' }),
-                'New title'
+                expect.objectContaining({ id: 1, title: "Column Backlog" }),
+                "New title"
               );
             });
           });
@@ -512,13 +511,13 @@ describe('<Board />', () => {
             expect(onColumnRename).not.toHaveBeenCalled();
           });
 
-          it('does not show the button on column header to remove the column', () => {
-            expect(screen.queryByTestId('column-1').querySelector('button')).not.toBeInTheDocument();
+          it("does not show the button on column header to remove the column", () => {
+            expect(screen.queryByTestId("column-1").querySelector("button")).not.toBeInTheDocument();
           });
         });
       });
 
-      describe('when the component receives a custom header column template', () => {
+      describe("when the component receives a custom header column template", () => {
         beforeEach(() => {
           const renderColumnHeader = ({ title }) => <div>{title}</div>;
           onColumnRename = jest.fn();
@@ -531,12 +530,12 @@ describe('<Board />', () => {
       });
     });
 
-    describe('about the card removing', () => {
+    describe("about the card removing", () => {
       beforeEach(() => {
         onCardRemove = jest.fn();
       });
 
-      describe('when the component uses the default card template', () => {
+      describe("when the component uses the default card template", () => {
         describe('when the component receives the "allowRemoveCard" prop', () => {
           beforeEach(() => mount({ allowRemoveCard: true, onCardRemove } as any));
 
@@ -544,21 +543,21 @@ describe('<Board />', () => {
             expect(onCardRemove).not.toHaveBeenCalled();
           });
 
-          describe('when the user clicks to remove a card from a column', () => {
+          describe("when the user clicks to remove a card from a column", () => {
             beforeEach(() => {
-              const removeCardButton = within(screen.queryByTestId('card-1')).queryByText('×');
+              const removeCardButton = within(screen.queryByTestId("card-1")).queryByText("×");
               fireEvent.click(removeCardButton);
             });
 
             it('calls the "onCardRemove" callback passing the card to be removed', () => {
               expect(onCardRemove).toHaveBeenCalledTimes(1);
-              expect(onCardRemove).toHaveBeenCalledWith(expect.objectContaining({ id: 1, title: 'Card title 1' }));
+              expect(onCardRemove).toHaveBeenCalledWith(expect.objectContaining({ id: 1, title: "Card title 1" }));
             });
           });
         });
       });
 
-      describe('when the component receives a custom card template', () => {
+      describe("when the component receives a custom card template", () => {
         let renderCard;
 
         beforeEach(() => {
@@ -574,7 +573,7 @@ describe('<Board />', () => {
     });
   });
 
-  describe('when the board is uncontrolled', () => {
+  describe("when the board is uncontrolled", () => {
     function mount({ Component = Board, initialBoard = board, ...props } = {}) {
       subject = render(<Component initialBoard={initialBoard} {...props} />);
       return subject;
@@ -583,9 +582,9 @@ describe('<Board />', () => {
     function UselessState({ initialBoard, ...props }) {
       const [board, setBoard] = useState(initialBoard);
 
-      function handleCardMoving() {
+      const handleCardMoving = () => {
         setBoard(moveCard(board, { fromPosition: 0, fromColumnId: 1 }, { toPosition: 1, toColumnId: 1 }));
-      }
+      };
 
       return (
         <>
@@ -595,21 +594,21 @@ describe('<Board />', () => {
       );
     }
 
-    it('renders a board only on mounting according to the initialBoard prop', () => {
-      expect(mount().container.querySelector('div')).toBeInTheDocument();
+    it("renders a board only on mounting according to the initialBoard prop", () => {
+      expect(mount().container.querySelector("div")).toBeInTheDocument();
     });
 
-    it('does not rerender on initialBoard change', () => {
+    it("does not rerender on initialBoard change", () => {
       mount({ Component: UselessState });
 
-      const column = within(screen.queryByTestId('column-1'));
+      const column = within(screen.queryByTestId("column-1"));
       const cards = column.queryAllByText(/^Card title/);
 
       expect(cards).toHaveLength(2);
       expect(cards[0]).toHaveTextContent(/^Card title 1$/);
       expect(cards[1]).toHaveTextContent(/^Card title 2$/);
 
-      fireEvent.click(screen.queryByText('Move card', { selector: 'button' }));
+      fireEvent.click(screen.queryByText("Move card", { selector: "button" }));
 
       const movedCards = column.queryAllByText(/^Card title/);
 
@@ -618,7 +617,7 @@ describe('<Board />', () => {
       expect(movedCards[1]).toHaveTextContent(/^Card title 2$/);
     });
 
-    it('renders the specified columns in the board ordered by its specified position', () => {
+    it("renders the specified columns in the board ordered by its specified position", () => {
       mount();
       const columns = screen.queryAllByText(/^Column/);
       expect(columns).toHaveLength(2);
@@ -626,82 +625,82 @@ describe('<Board />', () => {
       expect(columns[1]).toHaveTextContent(/^Column Doing$/);
     });
 
-    it('renders the specified cards in their columns', () => {
+    it("renders the specified cards in their columns", () => {
       mount();
-      const column = within(screen.queryByTestId('column-1'));
+      const column = within(screen.queryByTestId("column-1"));
       const cards = column.queryAllByText(/^Card title/);
       expect(cards).toHaveLength(2);
     });
 
-    describe('about the card moving', () => {
+    describe("about the card moving", () => {
       describe('when the component receives "onCardDragEnd" callback', () => {
         beforeEach(() => {
           onCardDragEnd = jest.fn();
           mount({ onCardDragEnd } as any);
         });
 
-        describe('when the user cancels the card moving', () => {
+        describe("when the user cancels the card moving", () => {
           beforeEach(() => {
             callbacks.onDragEnd({ source: null, destination: null });
           });
 
-          it('does not call onCardDragEnd callback', () => {
+          it("does not call onCardDragEnd callback", () => {
             expect(onCardDragEnd).not.toHaveBeenCalled();
           });
         });
 
-        describe('whe the user moves a card to the same position', () => {
+        describe("whe the user moves a card to the same position", () => {
           beforeEach(() => {
             act(() => {
               callbacks.onDragEnd({
-                source: { droppableId: '1', index: 0 },
-                destination: { droppableId: '1', index: 0 },
+                source: { droppableId: "1", index: 0 },
+                destination: { droppableId: "1", index: 0 },
               });
             });
           });
 
-          it('does not call onCardDragEnd callback', () => {
+          it("does not call onCardDragEnd callback", () => {
             expect(onCardDragEnd).not.toHaveBeenCalled();
           });
         });
 
-        describe('when the user moves a card to another position', () => {
+        describe("when the user moves a card to another position", () => {
           beforeEach(() => {
             act(() => {
               callbacks.onDragEnd({
-                source: { droppableId: '1', index: 0 },
-                destination: { droppableId: '1', index: 1 },
+                source: { droppableId: "1", index: 0 },
+                destination: { droppableId: "1", index: 1 },
               });
             });
           });
 
-          it('calls the onCardDragEnd callback passing the modified board, the card and the move coordinates', () => {
+          it("calls the onCardDragEnd callback passing the modified board, the card and the move coordinates", () => {
             const expectedBoard = {
               columns: [
                 {
                   id: 1,
-                  title: 'Column Backlog',
+                  title: "Column Backlog",
                   cards: [
                     {
                       id: 2,
-                      title: 'Card title 2',
-                      description: 'Card content',
+                      title: "Card title 2",
+                      description: "Card content",
                     },
                     {
                       id: 1,
-                      title: 'Card title 1',
-                      description: 'Card content',
+                      title: "Card title 1",
+                      description: "Card content",
                     },
                   ],
                 },
                 {
                   id: 2,
-                  title: 'Column Doing',
+                  title: "Column Doing",
                   cards: [
                     {
                       id: 3,
-                      title: 'Card title 3',
-                      description: 'Card content',
+                      title: "Card title 3",
+                      description: "Card content",
                     },
                   ],
                 },
@@ -710,7 +709,7 @@ describe('<Board />', () => {
             expect(onCardDragEnd).toHaveBeenCalledTimes(1);
             expect(onCardDragEnd).toHaveBeenCalledWith(
               expectedBoard,
-              { description: 'Card content', id: 1, title: 'Card title 1' },
+              { description: "Card content", id: 1, title: "Card title 1" },
               { fromPosition: 0, fromColumnId: 1 },
               { toPosition: 1, toColumnId: 1 }
             );
@@ -719,69 +718,69 @@ describe('<Board />', () => {
       });
     });
 
-    describe('about the column moving', () => {
+    describe("about the column moving", () => {
       describe('when the component receives "onColumnDragEnd" callback', () => {
         beforeEach(() => {
           onColumnDragEnd = jest.fn();
           mount({ onColumnDragEnd } as any);
         });
 
-        describe('when the user cancels the column moving', () => {
+        describe("when the user cancels the column moving", () => {
           beforeEach(() => {
-            callbacks.onDragEnd({ source: null, destination: null, type: 'BOARD' });
+            callbacks.onDragEnd({ source: null, destination: null, type: "BOARD" });
           });
 
-          it('does not call onColumnDragEnd callback', () => {
+          it("does not call onColumnDragEnd callback", () => {
             expect(onColumnDragEnd).not.toHaveBeenCalled();
           });
         });
 
-        describe('when the user moves a column to same position', () => {
+        describe("when the user moves a column to same position", () => {
           beforeEach(() => {
             act(() => {
-              callbacks.onDragEnd({ source: { index: 0 }, destination: { index: 0 }, type: 'BOARD' });
+              callbacks.onDragEnd({ source: { index: 0 }, destination: { index: 0 }, type: "BOARD" });
             });
           });
 
-          it('does not call onColumnDragEnd callback', () => {
+          it("does not call onColumnDragEnd callback", () => {
             expect(onColumnDragEnd).not.toHaveBeenCalled();
           });
         });
 
-        describe('when the user moves a column to another position', () => {
+        describe("when the user moves a column to another position", () => {
           beforeEach(() => {
             act(() => {
-              callbacks.onDragEnd({ source: { index: 0 }, destination: { index: 1 }, type: 'BOARD' });
+              callbacks.onDragEnd({ source: { index: 0 }, destination: { index: 1 }, type: "BOARD" });
             });
           });
 
-          it('calls the onColumnDragEnd callback passing the modified board, the column, and the column move coordinates', () => {
+          it("calls the onColumnDragEnd callback passing the modified board, the column, and the column move coordinates", () => {
             const expectedBoard = {
               columns: [
                 {
                   id: 2,
-                  title: 'Column Doing',
+                  title: "Column Doing",
                   cards: [
                     {
                       id: 3,
-                      title: 'Card title 3',
-                      description: 'Card content',
+                      title: "Card title 3",
+                      description: "Card content",
                     },
                   ],
                 },
                 {
                   id: 1,
-                  title: 'Column Backlog',
+                  title: "Column Backlog",
                   cards: [
                     {
                       id: 1,
-                      title: 'Card title 1',
-                      description: 'Card content',
+                      title: "Card title 1",
+                      description: "Card content",
                     },
                     {
                       id: 2,
-                      title: 'Card title 2',
-                      description: 'Card content',
+                      title: "Card title 2",
+                      description: "Card content",
                     },
                   ],
                 },
@@ -791,7 +790,7 @@ describe('<Board />', () => {
             expect(onColumnDragEnd).toHaveBeenCalledTimes(1);
             expect(onColumnDragEnd).toHaveBeenCalledWith(
               expectedBoard,
-              expect.objectContaining({ title: 'Column Backlog' }),
+              expect.objectContaining({ title: "Column Backlog" }),
               { fromPosition: 0 },
               { toPosition: 1 }
             );
@@ -806,28 +805,28 @@ describe('<Board />', () => {
         columns: [
           {
             id: 1,
-            title: 'Column Backlog',
+            title: "Column Backlog",
             cards: [
               {
                 id: 1,
-                title: 'Card title',
-                content: 'Card content',
+                title: "Card title",
+                content: "Card content",
               },
               {
                 id: 2,
-                title: 'Card title',
-                content: 'Card content',
+                title: "Card title",
+                content: "Card content",
               },
             ],
           },
           {
             id: 2,
-            title: 'Column Doing',
+            title: "Column Doing",
             cards: [
               {
                 id: 3,
-                title: 'Card title',
-                content: 'Card content',
+                title: "Card title",
+                content: "Card content",
               },
             ],
           },
@@ -854,9 +853,9 @@ describe('<Board />', () => {
           expect(cards).toHaveLength(3);
         });
 
-        it('passes the card content and the card bag as a parameter to the renderCard prop', () => {
+        it("passes the card content and the card bag as a parameter to the renderCard prop", () => {
           expect(renderCard).toHaveBeenCalledWith(
-            { id: 1, title: 'Card title', content: 'Card content' },
+            { id: 1, title: "Card title", content: "Card content" },
             { removeCard: expect.any(Function), dragging: false }
           );
         });
@@ -869,9 +868,9 @@ describe('<Board />', () => {
         columns: [
           {
             id: 1,
-            title: 'Column Backlog',
+            title: "Column Backlog",
             wip: 1,
-            cards: [{ id: 2, title: 'Card title', content: 'Card content' }],
+            cards: [{ id: 2, title: "Card title", content: "Card content" }],
           },
         ],
       };
@@ -893,7 +892,7 @@ describe('<Board />', () => {
 
         it("renders the custom header on the board's column", () => {
           expect(screen.queryAllByTestId(/column/)).toHaveLength(1);
-          expect(screen.queryByTestId('column-1')).toHaveTextContent(/Column Backlog \(1\)/);
+          expect(screen.queryByTestId("column-1")).toHaveTextContent(/Column Backlog \(1\)/);
         });
 
         it('passes the column content, the "removeColumn" and the "renameColumn" to the "renderColumnHeader" prop', () => {
@@ -901,9 +900,9 @@ describe('<Board />', () => {
           expect(renderColumnHeader).toHaveBeenCalledWith(
             {
               id: 1,
-              title: 'Column Backlog',
+              title: "Column Backlog",
               wip: 1,
-              cards: [{ id: 2, title: 'Card title', content: 'Card content' }],
+              cards: [{ id: 2, title: "Card title", content: "Card content" }],
             },
             { removeColumn: expect.any(Function), renameColumn: expect.any(Function), addCard: expect.any(Function) }
           );
@@ -915,13 +914,13 @@ describe('<Board />', () => {
 
         it("renders the default header on the board's column", () => {
           expect(screen.queryAllByTestId(/column/)).toHaveLength(1);
-          expect(screen.queryByTestId('column-1')).toHaveTextContent(/Column Backlog/);
+          expect(screen.queryByTestId("column-1")).toHaveTextContent(/Column Backlog/);
         });
       });
     });
 
-    describe('about the column adding', () => {
-      describe('about the default column adder', () => {
+    describe("about the column adding", () => {
+      describe("about the default column adder", () => {
         describe('when the component does not receive "allowAddColumn" prop', () => {
           let onColumnNew, onNewColumnConfirm;
 
@@ -935,8 +934,8 @@ describe('<Board />', () => {
             onNewColumnConfirm = undefined;
           });
 
-          it('does not render the column adder', () => {
-            expect(screen.queryByText('➕')).not.toBeInTheDocument();
+          it("does not render the column adder", () => {
+            expect(screen.queryByText("➕")).not.toBeInTheDocument();
           });
         });
 
@@ -945,8 +944,8 @@ describe('<Board />', () => {
             mount({ allowAddColumn: true } as any);
           });
 
-          it('does not render the column adder', () => {
-            expect(screen.queryByText('➕')).not.toBeInTheDocument();
+          it("does not render the column adder", () => {
+            expect(screen.queryByText("➕")).not.toBeInTheDocument();
           });
         });
 
@@ -963,41 +962,41 @@ describe('<Board />', () => {
             onNewColumnConfirm = undefined;
           });
 
-          it('renders the column placeholder as the last column to add a new column', () => {
-            expect(screen.getByText('➕')).toBeInTheDocument();
+          it("renders the column placeholder as the last column to add a new column", () => {
+            expect(screen.getByText("➕")).toBeInTheDocument();
           });
 
-          describe('when the user clicks to add a new column', () => {
-            beforeEach(() => fireEvent.click(screen.queryByText('➕')));
+          describe("when the user clicks to add a new column", () => {
+            beforeEach(() => fireEvent.click(screen.queryByText("➕")));
 
-            it('hides the column placeholder', () => {
-              expect(screen.queryByText('➕')).not.toBeInTheDocument();
+            it("hides the column placeholder", () => {
+              expect(screen.queryByText("➕")).not.toBeInTheDocument();
             });
 
-            it('renders the input asking for a column title', () => {
-              expect(subject.container.querySelector('input')).toBeInTheDocument();
+            it("renders the input asking for a column title", () => {
+              expect(subject.container.querySelector("input")).toBeInTheDocument();
             });
 
-            describe('when the user confirms the new column', () => {
+            describe("when the user confirms the new column", () => {
               beforeEach(async () => {
-                fireEvent.change(subject.container.querySelector('input'), {
-                  target: { value: 'Column Added by user' },
+                fireEvent.change(subject.container.querySelector("input"), {
+                  target: { value: "Column Added by user" },
                 });
-                fireEvent.click(screen.queryByText('Add'));
-                await screen.findByTestId('column-999');
+                fireEvent.click(screen.queryByText("Add"));
+                await screen.findByTestId("column-999");
               });
 
               it('calls the "onNewColumnConfirm" passing the new column', () => {
                 expect(onNewColumnConfirm).toHaveBeenCalledTimes(1);
-                expect(onNewColumnConfirm).toHaveBeenCalledWith({ title: 'Column Added by user', cards: [] });
+                expect(onNewColumnConfirm).toHaveBeenCalledWith({ title: "Column Added by user", cards: [] });
               });
 
               it('renders the new column using the id returned on "onNewColumnConfirm"', () => {
                 expect(screen.queryAllByTestId(/column-\d+/)).toHaveLength(3);
               });
 
-              it('renders the column placeholder as the last column to add a new column', () => {
-                expect(screen.getByText('➕')).toBeInTheDocument();
+              it("renders the column placeholder as the last column to add a new column", () => {
+                expect(screen.getByText("➕")).toBeInTheDocument();
               });
 
               it('calls the "onColumnNew" passing the modified board and the added column', () => {
@@ -1010,30 +1009,30 @@ describe('<Board />', () => {
                       expect.objectContaining({ id: 999 }),
                     ],
                   },
-                  { id: 999, title: 'Column Added by user', cards: [] }
+                  { id: 999, title: "Column Added by user", cards: [] }
                 );
               });
             });
 
-            describe('when the user cancels the new column adding', () => {
+            describe("when the user cancels the new column adding", () => {
               beforeEach(() => {
-                fireEvent.click(screen.queryByText('Cancel'));
+                fireEvent.click(screen.queryByText("Cancel"));
               });
 
-              it('does not add any new column', () => {
+              it("does not add any new column", () => {
                 expect(screen.queryAllByTestId(/column-\d+/)).toHaveLength(2);
               });
 
-              it('renders the column placeholder as the last column to add a new column', () => {
-                expect(screen.getByText('➕')).toBeInTheDocument();
+              it("renders the column placeholder as the last column to add a new column", () => {
+                expect(screen.getByText("➕")).toBeInTheDocument();
               });
             });
           });
         });
       });
 
-      describe('about custom column adder', () => {
-        describe('when the component receives a custom column adder', () => {
+      describe("about custom column adder", () => {
+        describe("when the component receives a custom column adder", () => {
           let onColumnNew, renderColumnAdder;
 
           describe('when the component does not receive "allowAddColumn" prop', () => {
@@ -1047,8 +1046,8 @@ describe('<Board />', () => {
               mount({ renderColumnAdder } as any);
             });
 
-            it('does not render the custom render adder', () => {
-              expect(screen.queryByTestId('columnAdder')).not.toBeInTheDocument();
+            it("does not render the custom render adder", () => {
+              expect(screen.queryByTestId("columnAdder")).not.toBeInTheDocument();
             });
           });
 
@@ -1057,15 +1056,15 @@ describe('<Board />', () => {
               onColumnNew = jest.fn();
               renderColumnAdder = jest.fn(({ addColumn }) => (
                 <div data-testid='columnAdder'>
-                  <button onClick={() => addColumn({ id: 99, title: 'New column', cards: [] })}>Add column</button>
+                  <button onClick={() => addColumn({ id: 99, title: "New column", cards: [] })}>Add column</button>
                 </div>
               ));
 
               mount({ children: board, renderColumnAdder, allowAddColumn: true, onColumnNew } as any);
             });
 
-            it('renders the custom column adder as the last column to add a new column', () => {
-              expect(screen.getByTestId('columnAdder')).toBeInTheDocument();
+            it("renders the custom column adder as the last column to add a new column", () => {
+              expect(screen.getByTestId("columnAdder")).toBeInTheDocument();
             });
 
             it('passes the "addColumn" to the "renderColumnAdder" prop', () => {
@@ -1074,12 +1073,12 @@ describe('<Board />', () => {
             });
 
             describe('when the "addColumn" callback is called', () => {
-              beforeEach(() => fireEvent.click(within(screen.queryByTestId('columnAdder')).queryByText('Add column')));
+              beforeEach(() => fireEvent.click(within(screen.queryByTestId("columnAdder")).queryByText("Add column")));
 
-              it('renders the new column', () => {
+              it("renders the new column", () => {
                 const column = screen.queryAllByTestId(/column-\d+/);
                 expect(column).toHaveLength(3);
-                expect(column[2]).toHaveTextContent('New column');
+                expect(column[2]).toHaveTextContent("New column");
               });
 
               it('calls the "onColumnNew" callback passing both the updated board and the added column', () => {
@@ -1089,10 +1088,10 @@ describe('<Board />', () => {
                     columns: [
                       expect.objectContaining({ id: 1 }),
                       expect.objectContaining({ id: 2 }),
-                      expect.objectContaining({ id: 99, title: 'New column' }),
+                      expect.objectContaining({ id: 99, title: "New column" }),
                     ],
                   },
-                  expect.objectContaining({ id: 99, title: 'New column' })
+                  expect.objectContaining({ id: 99, title: "New column" })
                 );
               });
             });
@@ -1101,12 +1100,12 @@ describe('<Board />', () => {
       });
     });
 
-    describe('about the column removing', () => {
+    describe("about the column removing", () => {
       beforeEach(() => {
         onColumnRemove = jest.fn();
       });
 
-      describe('when the component uses the default header template', () => {
+      describe("when the component uses the default header template", () => {
         describe('when the component receives the "allowRemoveColumn" prop', () => {
           beforeEach(() => mount({ allowRemoveColumn: true, onColumnRemove } as any));
 
@@ -1114,16 +1113,16 @@ describe('<Board />', () => {
             expect(onColumnRemove).not.toHaveBeenCalled();
           });
 
-          describe('when the user clicks to remove a column', () => {
+          describe("when the user clicks to remove a column", () => {
             beforeEach(() => {
-              const removeColumnButton = within(screen.queryByTestId('column-1')).queryByText('×');
+              const removeColumnButton = within(screen.queryByTestId("column-1")).queryByText("×");
               fireEvent.click(removeColumnButton);
             });
 
-            it('removes the column', () => {
+            it("removes the column", () => {
               const column = screen.queryAllByTestId(/column-\d+/);
               expect(column).toHaveLength(1);
-              expect(column[0]).toHaveTextContent('Column Doing');
+              expect(column[0]).toHaveTextContent("Column Doing");
             });
 
             it('calls the "onColumnRemove" callback passing both the updated board and the removed column', () => {
@@ -1137,7 +1136,7 @@ describe('<Board />', () => {
         });
       });
 
-      describe('when the component receives a custom header column template', () => {
+      describe("when the component receives a custom header column template", () => {
         let renderColumnHeader;
 
         beforeEach(() => {
@@ -1152,18 +1151,18 @@ describe('<Board />', () => {
 
         it('passes the column and the column bag to the "renderColumnHeader"', () => {
           expect(renderColumnHeader).toHaveBeenCalledWith(
-            expect.objectContaining({ id: 1, title: 'Column Backlog' }),
+            expect.objectContaining({ id: 1, title: "Column Backlog" }),
             expect.objectContaining({ removeColumn: expect.any(Function), renameColumn: expect.any(Function) })
           );
         });
 
         describe('when the "removeColumn" callback is called', () => {
-          beforeEach(() => fireEvent.click(within(screen.queryByTestId('column-1')).queryByText('Column Backlog')));
+          beforeEach(() => fireEvent.click(within(screen.queryByTestId("column-1")).queryByText("Column Backlog")));
 
-          it('removes the column', () => {
+          it("removes the column", () => {
             const column = screen.queryAllByTestId(/column-\d+/);
             expect(column).toHaveLength(1);
-            expect(column[0]).toHaveTextContent('Column Doing');
+            expect(column[0]).toHaveTextContent("Column Doing");
           });
 
           it('calls the "onColumnRemove" callback passing both the updated board and the removed column', () => {
@@ -1177,8 +1176,8 @@ describe('<Board />', () => {
       });
     });
 
-    describe('about the column renaming', () => {
-      describe('when the component use the default header template', () => {
+    describe("about the column renaming", () => {
+      describe("when the component use the default header template", () => {
         describe('when the component receives the "allowRenameColumn" prop', () => {
           beforeEach(() => {
             onColumnRename = jest.fn();
@@ -1189,16 +1188,16 @@ describe('<Board />', () => {
             expect(onColumnRename).not.toHaveBeenCalled();
           });
 
-          describe('when the user renames a column', () => {
+          describe("when the user renames a column", () => {
             beforeEach(() => {
-              fireEvent.click(within(screen.queryByTestId('column-1')).queryByText('Column Backlog'));
-              fireEvent.change(subject.container.querySelector('input'), { target: { value: 'New title' } });
-              fireEvent.click(screen.queryByText('Rename', { selector: 'button' }));
+              fireEvent.click(within(screen.queryByTestId("column-1")).queryByText("Column Backlog"));
+              fireEvent.change(subject.container.querySelector("input"), { target: { value: "New title" } });
+              fireEvent.click(screen.queryByText("Rename", { selector: "button" }));
             });
 
-            it('renames the column', () => {
-              expect(screen.queryByText('Column Backlog')).not.toBeInTheDocument();
-              expect(screen.getByText('New title')).toBeInTheDocument();
+            it("renames the column", () => {
+              expect(screen.queryByText("Column Backlog")).not.toBeInTheDocument();
+              expect(screen.getByText("New title")).toBeInTheDocument();
             });
 
             it('calls the "onColumnRename" callback passing both the updated board and the renamed column', () => {
@@ -1206,11 +1205,11 @@ describe('<Board />', () => {
               expect(onColumnRename).toHaveBeenCalledWith(
                 {
                   columns: [
-                    expect.objectContaining({ id: 1, title: 'New title' }),
-                    expect.objectContaining({ id: 2, title: 'Column Doing' }),
+                    expect.objectContaining({ id: 1, title: "New title" }),
+                    expect.objectContaining({ id: 2, title: "Column Doing" }),
                   ],
                 },
-                expect.objectContaining({ id: 1, title: 'New title' })
+                expect.objectContaining({ id: 1, title: "New title" })
               );
             });
           });
@@ -1226,16 +1225,16 @@ describe('<Board />', () => {
             expect(onColumnRename).not.toHaveBeenCalled();
           });
 
-          it('does not show the button on column header to remove the column', () => {
-            expect(screen.queryByTestId('column-1').querySelector('button')).not.toBeInTheDocument();
+          it("does not show the button on column header to remove the column", () => {
+            expect(screen.queryByTestId("column-1").querySelector("button")).not.toBeInTheDocument();
           });
         });
       });
 
-      describe('when the component receives a custom header column template', () => {
+      describe("when the component receives a custom header column template", () => {
         beforeEach(() => {
           const renderColumnHeader = ({ title }, { renameColumn }) => (
-            <div onClick={() => renameColumn('New title')}>{title}</div>
+            <div onClick={() => renameColumn("New title")}>{title}</div>
           );
           onColumnRename = jest.fn();
           mount({ renderColumnHeader, onColumnRename } as any);
@@ -1246,10 +1245,10 @@ describe('<Board />', () => {
         });
 
         describe('when the "renameColumn" callback is called', () => {
-          beforeEach(() => fireEvent.click(within(screen.queryByTestId('column-1')).queryByText('Column Backlog')));
+          beforeEach(() => fireEvent.click(within(screen.queryByTestId("column-1")).queryByText("Column Backlog")));
 
-          it('renames the column', () => {
-            expect(screen.queryByTestId('column-1')).toHaveTextContent('New title');
+          it("renames the column", () => {
+            expect(screen.queryByTestId("column-1")).toHaveTextContent("New title");
           });
 
           it('calls the "onColumnRename" callback passing both the updated board and the renamed column', () => {
@@ -1257,23 +1256,23 @@ describe('<Board />', () => {
             expect(onColumnRename).toHaveBeenCalledWith(
               {
                 columns: [
-                  expect.objectContaining({ id: 1, title: 'New title' }),
-                  expect.objectContaining({ id: 2, title: 'Column Doing' }),
+                  expect.objectContaining({ id: 1, title: "New title" }),
+                  expect.objectContaining({ id: 2, title: "Column Doing" }),
                 ],
               },
-              expect.objectContaining({ id: 1, title: 'New title' })
+              expect.objectContaining({ id: 1, title: "New title" })
             );
           });
         });
       });
     });
 
-    describe('about the card removing', () => {
+    describe("about the card removing", () => {
       beforeEach(() => {
         onCardRemove = jest.fn();
       });
 
-      describe('when the component uses the default card template', () => {
+      describe("when the component uses the default card template", () => {
         describe('when the component receives the "allowRemoveCard" prop', () => {
           beforeEach(() => mount({ allowRemoveCard: true, onCardRemove } as any));
 
@@ -1281,17 +1280,17 @@ describe('<Board />', () => {
             expect(onCardRemove).not.toHaveBeenCalled();
           });
 
-          describe('when the user clicks to remove a card from a column', () => {
+          describe("when the user clicks to remove a card from a column", () => {
             beforeEach(() => {
-              const removeCardButton = within(screen.queryByTestId('card-1')).queryByText('×');
+              const removeCardButton = within(screen.queryByTestId("card-1")).queryByText("×");
               fireEvent.click(removeCardButton);
             });
 
-            it('removes the card from the column', () => {
+            it("removes the card from the column", () => {
               const cards = screen.queryAllByText(/^Card title/);
               expect(cards).toHaveLength(2);
-              expect(cards[0]).toHaveTextContent('Card title 2');
-              expect(cards[1]).toHaveTextContent('Card title 3');
+              expect(cards[0]).toHaveTextContent("Card title 2");
+              expect(cards[1]).toHaveTextContent("Card title 3");
             });
 
             it('calls the "onCardRemove" callback passing the updated board, the updated column and the removed card', () => {
@@ -1303,15 +1302,15 @@ describe('<Board />', () => {
                     expect.objectContaining({ id: 2, cards: [expect.objectContaining({ id: 3 })] }),
                   ],
                 },
-                expect.objectContaining({ id: 1, title: 'Column Backlog' }),
-                expect.objectContaining({ id: 1, title: 'Card title 1' })
+                expect.objectContaining({ id: 1, title: "Column Backlog" }),
+                expect.objectContaining({ id: 1, title: "Card title 1" })
               );
             });
           });
         });
       });
 
-      describe('when the component receives a custom card template', () => {
+      describe("when the component receives a custom card template", () => {
         let renderCard;
 
         beforeEach(() => {
@@ -1326,19 +1325,19 @@ describe('<Board />', () => {
 
         it('passes the card and the card bag to the "renderCard"', () => {
           expect(renderCard).toHaveBeenCalledWith(
-            expect.objectContaining({ title: 'Card title 1' }),
+            expect.objectContaining({ title: "Card title 1" }),
             expect.objectContaining({ removeCard: expect.any(Function), dragging: false })
           );
         });
 
         describe('when the "removeCard" callback is called', () => {
-          beforeEach(() => fireEvent.click(screen.queryByText('Card title 1')));
+          beforeEach(() => fireEvent.click(screen.queryByText("Card title 1")));
 
-          it('removes the card from the column', () => {
+          it("removes the card from the column", () => {
             const cards = screen.queryAllByText(/^Card title/);
             expect(cards).toHaveLength(2);
-            expect(cards[0]).toHaveTextContent('Card title 2');
-            expect(cards[1]).toHaveTextContent('Card title 3');
+            expect(cards[0]).toHaveTextContent("Card title 2");
+            expect(cards[1]).toHaveTextContent("Card title 3");
           });
 
           it('calls the "onCardRemove" callback passing the updated board, column and the removed card', () => {
@@ -1346,22 +1345,22 @@ describe('<Board />', () => {
             expect(onCardRemove).toHaveBeenCalledWith(
               {
                 columns: [
-                  expect.objectContaining({ title: 'Column Backlog' }),
-                  expect.objectContaining({ title: 'Column Doing' }),
+                  expect.objectContaining({ title: "Column Backlog" }),
+                  expect.objectContaining({ title: "Column Doing" }),
                 ],
               },
-              expect.objectContaining({ id: 1, title: 'Column Backlog' }),
-              expect.objectContaining({ id: 1, title: 'Card title 1' })
+              expect.objectContaining({ id: 1, title: "Column Backlog" }),
+              expect.objectContaining({ id: 1, title: "Card title 1" })
             );
           });
         });
       });
     });
 
-    describe('about the card adding', () => {
-      describe('when the component receives a custom header column template', () => {
+    describe("about the card adding", () => {
+      describe("when the component receives a custom header column template", () => {
         const renderColumnHeader = jest.fn((_, { addCard }) => {
-          return <button onClick={() => addCard({ id: 99, title: 'New card' })}>New card</button>;
+          return <button onClick={() => addCard({ id: 99, title: "New card" })}>New card</button>;
         });
         const onCardNew = jest.fn();
 
@@ -1378,7 +1377,7 @@ describe('<Board />', () => {
         it('passes the column and the column bag to the "renderColumnHeader"', () => {
           mount({ renderColumnHeader, onCardNew } as any);
           expect(renderColumnHeader).toHaveBeenCalledWith(
-            expect.objectContaining({ id: 1, title: 'Column Backlog' }),
+            expect.objectContaining({ id: 1, title: "Column Backlog" }),
             expect.objectContaining({
               removeColumn: expect.any(Function),
               renameColumn: expect.any(Function),
@@ -1388,16 +1387,16 @@ describe('<Board />', () => {
         });
 
         describe('when the "addCard" callback is called', () => {
-          describe('when the position is not specified', () => {
+          describe("when the position is not specified", () => {
             beforeEach(() => {
               mount({ renderColumnHeader, onCardNew } as any);
-              fireEvent.click(within(screen.queryByTestId('column-1')).queryByText('New card'));
+              fireEvent.click(within(screen.queryByTestId("column-1")).queryByText("New card"));
             });
 
-            it('adds a new card on the bottom of the column', () => {
-              const cards = within(screen.queryByTestId('column-1')).queryAllByTestId(/card/);
+            it("adds a new card on the bottom of the column", () => {
+              const cards = within(screen.queryByTestId("column-1")).queryAllByTestId(/card/);
               expect(cards).toHaveLength(3);
-              expect(cards[2]).toHaveTextContent('New card');
+              expect(cards[2]).toHaveTextContent("New card");
             });
 
             it('calls the "onCardNew" callback passing the updated board, the updated column and the new card', () => {
@@ -1419,19 +1418,19 @@ describe('<Board />', () => {
             });
           });
 
-          describe('when the position is specified to add the card on the top of the column', () => {
+          describe("when the position is specified to add the card on the top of the column", () => {
             beforeEach(() => {
               const renderColumnHeader = jest.fn((_, { addCard }) => {
-                return <button onClick={() => addCard({ id: 99, title: 'New card' }, { on: 'top' })}>New card</button>;
+                return <button onClick={() => addCard({ id: 99, title: "New card" }, { on: "top" })}>New card</button>;
               });
               mount({ renderColumnHeader, onCardNew } as any);
-              fireEvent.click(within(screen.queryByTestId('column-1')).queryByText('New card'));
+              fireEvent.click(within(screen.queryByTestId("column-1")).queryByText("New card"));
             });
 
-            it('adds a new card on the top of the column', () => {
-              const cards = within(screen.queryByTestId('column-1')).queryAllByTestId(/card/);
+            it("adds a new card on the top of the column", () => {
+              const cards = within(screen.queryByTestId("column-1")).queryAllByTestId(/card/);
               expect(cards).toHaveLength(3);
-              expect(cards[0]).toHaveTextContent('New card');
+              expect(cards[0]).toHaveTextContent("New card");
             });
 
             it('calls the "onCardNew" callback passing the updated board, the updated column and the new card', () => {
@@ -1453,21 +1452,21 @@ describe('<Board />', () => {
             });
           });
 
-          describe('when the position is specified to add the card on the bottom of the column', () => {
+          describe("when the position is specified to add the card on the bottom of the column", () => {
             beforeEach(() => {
               const renderColumnHeader = jest.fn((_, { addCard }) => {
                 return (
-                  <button onClick={() => addCard({ id: 99, title: 'New card' }, { on: 'bottom' })}>New card</button>
+                  <button onClick={() => addCard({ id: 99, title: "New card" }, { on: "bottom" })}>New card</button>
                 );
               });
               mount({ renderColumnHeader, onCardNew } as any);
-              fireEvent.click(within(screen.queryByTestId('column-1')).queryByText('New card'));
+              fireEvent.click(within(screen.queryByTestId("column-1")).queryByText("New card"));
             });
 
-            it('adds a new card on the bottom of the column', () => {
-              const cards = within(screen.queryByTestId('column-1')).queryAllByTestId(/card/);
+            it("adds a new card on the bottom of the column", () => {
+              const cards = within(screen.queryByTestId("column-1")).queryAllByTestId(/card/);
               expect(cards).toHaveLength(3);
-              expect(cards[2]).toHaveTextContent('New card');
+              expect(cards[2]).toHaveTextContent("New card");
             });
 
             it('calls the "onCardNew" callback passing the updated board, the updated column and the new card', () => {
@@ -1491,7 +1490,7 @@ describe('<Board />', () => {
         });
       });
 
-      describe('when the component does not receive a custom header column template', () => {
+      describe("when the component does not receive a custom header column template", () => {
         const onCardNew = jest.fn();
         const onNewCardConfirm = jest.fn((column) => new Promise((resolve) => resolve({ id: 999, ...column })));
 
@@ -1500,8 +1499,8 @@ describe('<Board />', () => {
             mount({ allowAddCard: false, onNewCardConfirm, onCardNew } as any);
           });
 
-          it('does not render the card adder', () => {
-            expect(screen.queryByText('+')).not.toBeInTheDocument();
+          it("does not render the card adder", () => {
+            expect(screen.queryByText("+")).not.toBeInTheDocument();
           });
         });
 
@@ -1510,32 +1509,32 @@ describe('<Board />', () => {
             mount({ allowAddCard: true, onCardNew: () => {} } as any);
           });
 
-          it('does not render the column adder', () => {
-            expect(screen.queryByText('+')).not.toBeInTheDocument();
+          it("does not render the column adder", () => {
+            expect(screen.queryByText("+")).not.toBeInTheDocument();
           });
         });
 
         describe('when the component receives both the "allowAddCard" and "onNewCardConfirm" props', () => {
-          describe('when the user adds a new card', () => {
+          describe("when the user adds a new card", () => {
             beforeEach(async () => {
               mount({ allowAddCard: true, onNewCardConfirm, onCardNew } as any);
 
-              fireEvent.click(screen.queryAllByText('+')[0]);
+              fireEvent.click(screen.queryAllByText("+")[0]);
               fireEvent.change(subject.container.querySelector('input[name="title"]'), {
-                target: { value: 'Card title' },
+                target: { value: "Card title" },
               });
               fireEvent.change(subject.container.querySelector('input[name="description"]'), {
-                target: { value: 'Card description' },
+                target: { value: "Card description" },
               });
-              fireEvent.click(screen.queryByText('Add'));
-              await screen.findByTestId('card-999');
+              fireEvent.click(screen.queryByText("Add"));
+              await screen.findByTestId("card-999");
             });
 
             it('calls the "onNewCardConfirm" passing the new card', () => {
               expect(onNewCardConfirm).toHaveBeenCalledTimes(1);
               expect(onNewCardConfirm).toHaveBeenCalledWith({
-                title: 'Card title',
-                description: 'Card description',
+                title: "Card title",
+                description: "Card description",
               });
             });
 
@@ -1543,14 +1542,14 @@ describe('<Board />', () => {
               expect(screen.queryAllByTestId(/card/)).toHaveLength(4);
             });
 
-            it('renders the card placeholder', () => {
-              expect(screen.queryAllByText('+')).toHaveLength(2);
+            it("renders the card placeholder", () => {
+              expect(screen.queryAllByText("+")).toHaveLength(2);
             });
 
-            it('adds a new card on column', () => {
-              const cards = within(screen.queryByTestId('column-1')).queryAllByTestId(/card/);
+            it("adds a new card on column", () => {
+              const cards = within(screen.queryByTestId("column-1")).queryAllByTestId(/card/);
               expect(cards).toHaveLength(3);
-              expect(cards[2]).toHaveTextContent('Card title');
+              expect(cards[2]).toHaveTextContent("Card title");
             });
 
             it('calls the "onCardNew" callback passing the updated board, the updated column and the new card', () => {
@@ -1560,29 +1559,29 @@ describe('<Board />', () => {
                   columns: [
                     {
                       id: 1,
-                      title: 'Column Backlog',
+                      title: "Column Backlog",
                       cards: [
                         {
                           id: 1,
-                          title: 'Card title 1',
-                          description: 'Card content',
+                          title: "Card title 1",
+                          description: "Card content",
                         },
                         {
                           id: 2,
-                          title: 'Card title 2',
-                          description: 'Card content',
+                          title: "Card title 2",
+                          description: "Card content",
                         },
-                        { id: 999, title: 'Card title', description: 'Card description' },
+                        { id: 999, title: "Card title", description: "Card description" },
                       ],
                     },
                     {
                       id: 2,
-                      title: 'Column Doing',
+                      title: "Column Doing",
                       cards: [
                         {
                           id: 3,
-                          title: 'Card title 3',
-                          description: 'Card content',
+                          title: "Card title 3",
+                          description: "Card content",
                         },
                       ],
                     },
@@ -1590,19 +1589,19 @@ describe('<Board />', () => {
                 },
                 {
                   id: 1,
-                  title: 'Column Backlog',
+                  title: "Column Backlog",
                   cards: [
                     {
                       id: 1,
-                      title: 'Card title 1',
-                      description: 'Card content',
+                      title: "Card title 1",
+                      description: "Card content",
                     },
                     {
                       id: 2,
-                      title: 'Card title 2',
-                      description: 'Card content',
+                      title: "Card title 2",
+                      description: "Card content",
                     },
-                    { id: 999, title: 'Card title', description: 'Card description' },
+                    { id: 999, title: "Card title", description: "Card description" },
                   ],
                 },
                 expect.objectContaining({ id: 999 })
@@ -1610,26 +1609,26 @@ describe('<Board />', () => {
             });
           });
 
-          describe('about the card position when it is added', () => {
-            describe('when the position is not specified', () => {
+          describe("about the card position when it is added", () => {
+            describe("when the position is not specified", () => {
               beforeEach(async () => {
                 mount({ allowAddCard: true, onNewCardConfirm, onCardNew } as any);
-                fireEvent.click(screen.queryAllByText('+')[0]);
+                fireEvent.click(screen.queryAllByText("+")[0]);
 
                 fireEvent.change(subject.container.querySelector('input[name="title"]'), {
-                  target: { value: 'Card title' },
+                  target: { value: "Card title" },
                 });
                 fireEvent.change(subject.container.querySelector('input[name="description"]'), {
-                  target: { value: 'Card description' },
+                  target: { value: "Card description" },
                 });
-                fireEvent.click(screen.queryByText('Add'));
-                await screen.findByTestId('card-999');
+                fireEvent.click(screen.queryByText("Add"));
+                await screen.findByTestId("card-999");
               });
 
-              it('adds a new card on the bottom of the column', () => {
-                const cards = within(screen.queryByTestId('column-1')).queryAllByTestId(/card/);
+              it("adds a new card on the bottom of the column", () => {
+                const cards = within(screen.queryByTestId("column-1")).queryAllByTestId(/card/);
                 expect(cards).toHaveLength(3);
-                expect(cards[2]).toHaveTextContent('Card description');
+                expect(cards[2]).toHaveTextContent("Card description");
               });
 
               it('calls the "onCardNew" callback passing the updated board, the updated column and the new card on the end of the card array', () => {
@@ -1639,29 +1638,29 @@ describe('<Board />', () => {
                     columns: [
                       {
                         id: 1,
-                        title: 'Column Backlog',
+                        title: "Column Backlog",
                         cards: [
                           {
                             id: 1,
-                            title: 'Card title 1',
-                            description: 'Card content',
+                            title: "Card title 1",
+                            description: "Card content",
                           },
                           {
                             id: 2,
-                            title: 'Card title 2',
-                            description: 'Card content',
+                            title: "Card title 2",
+                            description: "Card content",
                           },
-                          { id: 999, title: 'Card title', description: 'Card description' },
+                          { id: 999, title: "Card title", description: "Card description" },
                         ],
                       },
                       {
                         id: 2,
-                        title: 'Column Doing',
+                        title: "Column Doing",
                         cards: [
                           {
                             id: 3,
-                            title: 'Card title 3',
-                            description: 'Card content',
+                            title: "Card title 3",
+                            description: "Card content",
                           },
                         ],
                       },
@@ -1669,19 +1668,19 @@ describe('<Board />', () => {
                   },
                   {
                     id: 1,
-                    title: 'Column Backlog',
+                    title: "Column Backlog",
                     cards: [
                       {
                         id: 1,
-                        title: 'Card title 1',
-                        description: 'Card content',
+                        title: "Card title 1",
+                        description: "Card content",
                       },
                       {
                         id: 2,
-                        title: 'Card title 2',
-                        description: 'Card content',
+                        title: "Card title 2",
+                        description: "Card content",
                       },
-                      { id: 999, title: 'Card title', description: 'Card description' },
+                      { id: 999, title: "Card title", description: "Card description" },
                     ],
                   },
                   expect.objectContaining({ id: 999 })
@@ -1689,25 +1688,25 @@ describe('<Board />', () => {
               });
             });
 
-            describe('when the position is specified to add the card on the top of the column', () => {
+            describe("when the position is specified to add the card on the top of the column", () => {
               beforeEach(async () => {
-                mount({ allowAddCard: { on: 'top' }, onNewCardConfirm, onCardNew } as any);
-                fireEvent.click(screen.queryAllByText('+')[0]);
+                mount({ allowAddCard: { on: "top" }, onNewCardConfirm, onCardNew } as any);
+                fireEvent.click(screen.queryAllByText("+")[0]);
 
                 fireEvent.change(subject.container.querySelector('input[name="title"]'), {
-                  target: { value: 'Card title' },
+                  target: { value: "Card title" },
                 });
                 fireEvent.change(subject.container.querySelector('input[name="description"]'), {
-                  target: { value: 'Card description' },
+                  target: { value: "Card description" },
                 });
-                fireEvent.click(screen.queryByText('Add'));
-                await screen.findByTestId('card-999');
+                fireEvent.click(screen.queryByText("Add"));
+                await screen.findByTestId("card-999");
               });
 
-              it('adds a new card on the top of the column', () => {
-                const cards = within(screen.queryByTestId('column-1')).queryAllByTestId(/card/);
+              it("adds a new card on the top of the column", () => {
+                const cards = within(screen.queryByTestId("column-1")).queryAllByTestId(/card/);
                 expect(cards).toHaveLength(3);
-                expect(cards[0]).toHaveTextContent('Card description');
+                expect(cards[0]).toHaveTextContent("Card description");
               });
 
               it('calls the "onCardNew" callback passing the updated board, the updated column and the new card on the start of the array', () => {
@@ -1717,29 +1716,29 @@ describe('<Board />', () => {
                     columns: [
                       {
                         id: 1,
-                        title: 'Column Backlog',
+                        title: "Column Backlog",
                         cards: [
-                          { id: 999, title: 'Card title', description: 'Card description' },
+                          { id: 999, title: "Card title", description: "Card description" },
                           {
                             id: 1,
-                            title: 'Card title 1',
-                            description: 'Card content',
+                            title: "Card title 1",
+                            description: "Card content",
                           },
                           {
                             id: 2,
-                            title: 'Card title 2',
-                            description: 'Card content',
+                            title: "Card title 2",
+                            description: "Card content",
                           },
                         ],
                       },
                       {
                         id: 2,
-                        title: 'Column Doing',
+                        title: "Column Doing",
                         cards: [
                           {
                             id: 3,
-                            title: 'Card title 3',
-                            description: 'Card content',
+                            title: "Card title 3",
+                            description: "Card content",
                           },
                         ],
                       },
@@ -1747,18 +1746,18 @@ describe('<Board />', () => {
                   },
                   {
                     id: 1,
-                    title: 'Column Backlog',
+                    title: "Column Backlog",
                     cards: [
-                      { id: 999, title: 'Card title', description: 'Card description' },
+                      { id: 999, title: "Card title", description: "Card description" },
                       {
                         id: 1,
-                        title: 'Card title 1',
-                        description: 'Card content',
+                        title: "Card title 1",
+                        description: "Card content",
                       },
                       {
                         id: 2,
-                        title: 'Card title 2',
-                        description: 'Card content',
+                        title: "Card title 2",
+                        description: "Card content",
                       },
                     ],
                   },
@@ -1767,25 +1766,25 @@ describe('<Board />', () => {
               });
             });
 
-            describe('when the position is specified to add the card on the bottom of the column', () => {
+            describe("when the position is specified to add the card on the bottom of the column", () => {
               beforeEach(async () => {
-                mount({ allowAddCard: { on: 'bottom' }, onNewCardConfirm, onCardNew } as any);
-                fireEvent.click(screen.queryAllByText('+')[0]);
+                mount({ allowAddCard: { on: "bottom" }, onNewCardConfirm, onCardNew } as any);
+                fireEvent.click(screen.queryAllByText("+")[0]);
 
                 fireEvent.change(subject.container.querySelector('input[name="title"]'), {
-                  target: { value: 'Card title' },
+                  target: { value: "Card title" },
                 });
                 fireEvent.change(subject.container.querySelector('input[name="description"]'), {
-                  target: { value: 'Card description' },
+                  target: { value: "Card description" },
                 });
-                fireEvent.click(screen.queryByText('Add'));
-                await screen.findByTestId('card-999');
+                fireEvent.click(screen.queryByText("Add"));
+                await screen.findByTestId("card-999");
               });
 
-              it('adds a new card on the bottom of the column', () => {
-                const cards = within(screen.queryByTestId('column-1')).queryAllByTestId(/card/);
+              it("adds a new card on the bottom of the column", () => {
+                const cards = within(screen.queryByTestId("column-1")).queryAllByTestId(/card/);
                 expect(cards).toHaveLength(3);
-                expect(cards[2]).toHaveTextContent('Card description');
+                expect(cards[2]).toHaveTextContent("Card description");
               });
 
               it('calls the "onCardNew" callback passing the updated board, the updated column and the new card on the end of the array', () => {
@@ -1795,29 +1794,29 @@ describe('<Board />', () => {
                     columns: [
                       {
                         id: 1,
-                        title: 'Column Backlog',
+                        title: "Column Backlog",
                         cards: [
                           {
                             id: 1,
-                            title: 'Card title 1',
-                            description: 'Card content',
+                            title: "Card title 1",
+                            description: "Card content",
                           },
                           {
                             id: 2,
-                            title: 'Card title 2',
-                            description: 'Card content',
+                            title: "Card title 2",
+                            description: "Card content",
                           },
-                          { id: 999, title: 'Card title', description: 'Card description' },
+                          { id: 999, title: "Card title", description: "Card description" },
                         ],
                       },
                       {
                         id: 2,
-                        title: 'Column Doing',
+                        title: "Column Doing",
                         cards: [
                           {
                             id: 3,
-                            title: 'Card title 3',
-                            description: 'Card content',
+                            title: "Card title 3",
+                            description: "Card content",
                           },
                         ],
                       },
@@ -1825,19 +1824,19 @@ describe('<Board />', () => {
                   },
                   {
                     id: 1,
-                    title: 'Column Backlog',
+                    title: "Column Backlog",
                     cards: [
                       {
                         id: 1,
-                        title: 'Card title 1',
-                        description: 'Card content',
+                        title: "Card title 1",
+                        description: "Card content",
                       },
                       {
                         id: 2,
-                        title: 'Card title 2',
-                        description: 'Card content',
+                        title: "Card title 2",
+                        description: "Card content",
                       },
-                      { id: 999, title: 'Card title', description: 'Card description' },
+                      { id: 999, title: "Card title", description: "Card description" },
                     ],
                   },
                   expect.objectContaining({ id: 999 })

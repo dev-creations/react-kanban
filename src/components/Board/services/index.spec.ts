@@ -4,131 +4,131 @@ import {
   getCoordinates,
   isMovingAColumnToAnotherPosition,
   isMovingACardToAnotherPosition,
-} from '.';
+} from ".";
 
-describe('#getCoordinates', () => {
-  describe('when the event does not have destination', () => {
-    it('returns empty object', () => {
+describe("#getCoordinates", () => {
+  describe("when the event does not have destination", () => {
+    it("returns empty object", () => {
       expect(getCoordinates({ destination: null }, undefined)).toEqual({});
     });
   });
 
-  describe('when the event is a column move', () => {
+  describe("when the event is a column move", () => {
     const event = {
-      type: 'BOARD',
+      type: "BOARD",
       source: { index: 0, droppableId: 0 },
       destination: { index: 1, droppableId: 1 },
     };
 
-    it('returns the column coordinates', () => {
+    it("returns the column coordinates", () => {
       expect(getCoordinates(event, undefined)).toEqual({ destination: { toPosition: 1 }, source: { fromPosition: 0 } });
     });
   });
 
-  describe('when the event is a card move', () => {
+  describe("when the event is a card move", () => {
     const board = {
       columns: [
         { id: 1, cards: [{ id: 1 }] },
-        { id: '2', cards: [{ id: 2 }] },
+        { id: "2", cards: [{ id: 2 }] },
       ],
     };
 
     const event = {
-      type: 'CARD',
-      source: { index: 0, droppableId: '1' },
-      destination: { index: 1, droppableId: '2' },
+      type: "CARD",
+      source: { index: 0, droppableId: "1" },
+      destination: { index: 1, droppableId: "2" },
     };
 
-    it('returns the card coordinates', () => {
+    it("returns the card coordinates", () => {
       expect(getCoordinates(event, board)).toEqual({
         source: { fromColumnId: 1, fromPosition: 0 },
-        destination: { toColumnId: '2', toPosition: 1 },
+        destination: { toColumnId: "2", toPosition: 1 },
       });
     });
   });
 });
 
-describe('#isAColumnMove', () => {
+describe("#isAColumnMove", () => {
   describe('when the type is "BOARD"', () => {
-    it('returns true', () => {
-      expect(isAColumnMove('BOARD')).toEqual(true);
+    it("returns true", () => {
+      expect(isAColumnMove("BOARD")).toBe(true);
     });
   });
 
   describe('when the type is not "BOARD"', () => {
-    it('returns false', () => {
-      expect(isAColumnMove('IS_NOT_BOARD')).toEqual(false);
+    it("returns false", () => {
+      expect(isAColumnMove("IS_NOT_BOARD")).toBe(false);
     });
   });
 });
 
-describe('#getCard', () => {
+describe("#getCard", () => {
   const board = {
     columns: [{ id: 1, cards: [{ id: 1 }, { id: 2 }, { id: 3 }] }],
   };
 
-  it('returns the card of the board from the given source', () => {
+  it("returns the card of the board from the given source", () => {
     expect(getCard(board, { fromColumnId: 1, fromPosition: 1 })).toEqual({ id: 2 });
   });
 });
 
-describe('#isMovingAColumnToAnotherPosition', () => {
-  describe('when coordinates does not have same source and destination', () => {
+describe("#isMovingAColumnToAnotherPosition", () => {
+  describe("when coordinates does not have same source and destination", () => {
     const validColumnCoordinates = {
       source: { fromPosition: 0 },
       destination: { toPosition: 1 },
     };
 
-    it('returns true', () => {
-      expect(isMovingAColumnToAnotherPosition(validColumnCoordinates)).toEqual(true);
+    it("returns true", () => {
+      expect(isMovingAColumnToAnotherPosition(validColumnCoordinates)).toBe(true);
     });
   });
 
-  describe('when coordinates has same source and destination', () => {
+  describe("when coordinates has same source and destination", () => {
     const invalidColumnCoordinates = {
       source: { fromPosition: 0 },
       destination: { toPosition: 0 },
     };
 
-    it('returns false', () => {
-      expect(isMovingAColumnToAnotherPosition(invalidColumnCoordinates)).toEqual(false);
+    it("returns false", () => {
+      expect(isMovingAColumnToAnotherPosition(invalidColumnCoordinates)).toBe(false);
     });
   });
 });
 
-describe('#isMovingACardToAnotherPosition', () => {
-  describe('when coordinates does not have same source and destination', () => {
-    describe('when the source column is different from the destination column', () => {
+describe("#isMovingACardToAnotherPosition", () => {
+  describe("when coordinates does not have same source and destination", () => {
+    describe("when the source column is different from the destination column", () => {
       const validCardCoordinates = {
         source: { fromPosition: 0, fromColumnId: 0 },
         destination: { toPosition: 0, toColumnId: 1 },
       };
 
-      it('returns true', () => {
-        expect(isMovingACardToAnotherPosition(validCardCoordinates)).toEqual(true);
+      it("returns true", () => {
+        expect(isMovingACardToAnotherPosition(validCardCoordinates)).toBe(true);
       });
     });
 
-    describe('when the source position is different from the destination position', () => {
+    describe("when the source position is different from the destination position", () => {
       const validCardCoordinates = {
         source: { fromPosition: 0, fromColumnId: 0 },
         destination: { toPosition: 1, toColumnId: 0 },
       };
 
-      it('returns true', () => {
-        expect(isMovingACardToAnotherPosition(validCardCoordinates)).toEqual(true);
+      it("returns true", () => {
+        expect(isMovingACardToAnotherPosition(validCardCoordinates)).toBe(true);
       });
     });
   });
 
-  describe('when coordinates has same source and destination', () => {
+  describe("when coordinates has same source and destination", () => {
     const validCardCoordinates = {
       source: { fromPosition: 0, fromColumnId: 0 },
       destination: { toPosition: 0, toColumnId: 0 },
     };
 
-    it('returns false', () => {
-      expect(isMovingACardToAnotherPosition(validCardCoordinates)).toEqual(false);
+    it("returns false", () => {
+      expect(isMovingACardToAnotherPosition(validCardCoordinates)).toBe(false);
     });
   });
 });

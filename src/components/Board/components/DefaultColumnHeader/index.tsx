@@ -1,9 +1,8 @@
-import React from 'react';
-import { useState } from 'react';
+import React, { useState } from "react";
 
 function ColumnTitle({ allowRenameColumn, onClick, children: title }) {
   return allowRenameColumn ? (
-    <span style={{ cursor: 'pointer' }} onClick={onClick}>
+    <span style={{ cursor: "pointer" }} onClick={onClick}>
       {title}
     </span>
   ) : (
@@ -23,19 +22,19 @@ function useRenameMode(state) {
 
 export default function ({ children: column, allowRemoveColumn, onColumnRemove, allowRenameColumn, onColumnRename }) {
   const [renameMode, toggleRenameMode] = useRenameMode(false);
-  const [titleInput, setTitleInput] = useState('');
+  const [titleInput, setTitleInput] = useState("");
 
-  function handleRenameColumn(event) {
+  const handleRenameColumn = (event) => {
     event.preventDefault();
 
     onColumnRename(column, titleInput);
     toggleRenameMode();
-  }
+  };
 
-  function handleRenameMode() {
+  const handleRenameMode = () => {
     setTitleInput(column.title);
     toggleRenameMode();
-  }
+  };
 
   return (
     <div className='react-kanban-column-header'>

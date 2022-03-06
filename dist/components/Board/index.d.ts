@@ -1,3 +1,3 @@
 /// <reference types="react" />
-declare function Board(props: any): JSX.Element;
+declare const Board: (props: any) => JSX.Element;
 export default Board;

@@ -1,24 +1,25 @@
-declare function getCoordinates(event: any, board: any): {
+import { DropResult } from "react-beautiful-dnd";
+declare function isAColumnMove(type: string): boolean;
+declare function getCoordinates(event: DropResult, board: any): {
     source?: undefined;
     destination?: undefined;
 } | {
     source: {
-        fromPosition: any;
+        fromPosition: number;
     };
     destination: {
-        toPosition: any;
+        toPosition: number;
     };
 } | {
     source: {
         fromColumnId: any;
-        fromPosition: any;
+        fromPosition: number;
     };
     destination: {
         toColumnId: any;
-        toPosition: any;
+        toPosition: number;
     };
 };
-declare function isAColumnMove(type: any): boolean;
 declare function getCard(board: any, sourceCoordinate: any): any;
 declare function isMovingAColumnToAnotherPosition(coordinates: any): boolean;
 declare function isMovingACardToAnotherPosition(coordinates: any): boolean;

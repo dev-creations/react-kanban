@@ -1,4 +1,14 @@
-function getCoordinates(event, board) {
+import { DropResult } from "react-beautiful-dnd";
+
+function isAColumnMove(type: string) {
+  return type === "BOARD";
+}
+
+function getColumn(board: any, droppableId: string) {
+  return board.columns.find(({ id }) => String(id) === droppableId);
+}
+
+function getCoordinates(event: DropResult, board: any) {
   if (event.destination === null) return {};
 
   const columnSource = { fromPosition: event.source.index };
@@ -14,17 +24,9 @@ function getCoordinates(event, board) {
   };
 }
 
-function isAColumnMove(type) {
-  return type === 'BOARD';
-}
-
 function getCard(board, sourceCoordinate) {
   const column = board.columns.find((column) => column.id === sourceCoordinate.fromColumnId);
   return column.cards[sourceCoordinate.fromPosition];
-}
-
-function getColumn(board, droppableId) {
-  return board.columns.find(({ id }) => String(id) === droppableId);
 }
 
 function isMovingAColumnToAnotherPosition(coordinates) {

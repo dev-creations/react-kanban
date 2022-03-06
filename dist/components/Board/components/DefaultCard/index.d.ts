@@ -1,7 +1,9 @@
 /// <reference types="react" />
-export default function ({ children: card, dragging, allowRemoveCard, onCardRemove }: {
+interface DefaultCardProps {
     children: any;
-    dragging: any;
-    allowRemoveCard: any;
-    onCardRemove: any;
-}): JSX.Element;
+    dragging: boolean;
+    allowRemoveCard: boolean;
+    onCardRemove: (card: any) => void;
+}
+declare const DefaultCard: ({ children: card, dragging, allowRemoveCard, onCardRemove }: DefaultCardProps) => JSX.Element;
+export default DefaultCard;

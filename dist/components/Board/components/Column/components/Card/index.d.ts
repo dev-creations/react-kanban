@@ -1,8 +1,8 @@
 /// <reference types="react" />
-declare function Card({ children, index, renderCard, disableCardDrag }: {
+declare const Card: ({ children, index, renderCard, disableCardDrag, }: {
     children: any;
-    index: any;
+    index: number;
     renderCard: any;
-    disableCardDrag: any;
-}): JSX.Element;
+    disableCardDrag: boolean;
+}) => JSX.Element;
 export default Card;

@@ -7,10 +7,10 @@ import {
   addCard,
   removeCard,
   changeCard,
-} from './helpers';
+} from "./helpers";
 
-describe('#moveColumn', () => {
-  it('returns a board with the column moved to the specified position', () => {
+describe("#moveColumn", () => {
+  it("returns a board with the column moved to the specified position", () => {
     const board = {
       columns: [
         { id: 1, cards: [{ id: 1 }, { id: 2 }, { id: 3 }] },
@@ -29,9 +29,9 @@ describe('#moveColumn', () => {
   });
 });
 
-describe('#moveCard', () => {
-  describe('when the card is moved in the same column', () => {
-    it('returns a board with the card moved in the same column to the specified position', () => {
+describe("#moveCard", () => {
+  describe("when the card is moved in the same column", () => {
+    it("returns a board with the card moved in the same column to the specified position", () => {
       const board = {
         columns: [
           { id: 1, cards: [{ id: 1 }, { id: 2 }, { id: 3 }] },
@@ -50,8 +50,8 @@ describe('#moveCard', () => {
     });
   });
 
-  describe('when the card is moved from a column to another column', () => {
-    it('returns a board with the card moved to another column to the specified position', () => {
+  describe("when the card is moved from a column to another column", () => {
+    it("returns a board with the card moved to another column to the specified position", () => {
       const board = {
         columns: [
           { id: 1, cards: [{ id: 1 }, { id: 2 }, { id: 3 }] },
@@ -73,8 +73,8 @@ describe('#moveCard', () => {
   });
 });
 
-describe('#addColumn', () => {
-  it('returns a board with the new column at the specified position', () => {
+describe("#addColumn", () => {
+  it("returns a board with the new column at the specified position", () => {
     const board = {
       columns: [
         { id: 1, cards: [{ id: 1 }, { id: 2 }, { id: 3 }] },
@@ -94,8 +94,8 @@ describe('#addColumn', () => {
   });
 });
 
-describe('#removeColumn', () => {
-  it('returns a board without the specified column', () => {
+describe("#removeColumn", () => {
+  it("returns a board without the specified column", () => {
     const board = {
       columns: [
         { id: 1, cards: [{ id: 1 }, { id: 2 }, { id: 3 }] },
@@ -111,21 +111,21 @@ describe('#removeColumn', () => {
   });
 });
 
-describe('#changeColumn', () => {
-  it('returns a board with the specified column changed according to passed column', () => {
+describe("#changeColumn", () => {
+  it("returns a board with the specified column changed according to passed column", () => {
     const board = {
       columns: [
-        { id: 1, title: 'Doing', cards: [{ id: 1 }, { id: 2 }, { id: 3 }] },
-        { id: 2, title: 'Done', cards: [{ id: 4 }, { id: 5 }, { id: 6 }] },
+        { id: 1, title: "Doing", cards: [{ id: 1 }, { id: 2 }, { id: 3 }] },
+        { id: 2, title: "Done", cards: [{ id: 4 }, { id: 5 }, { id: 6 }] },
       ],
     };
 
-    const boardWithTheModifiedColumn = changeColumn(board, { id: 1 }, { title: 'New title' });
+    const boardWithTheModifiedColumn = changeColumn(board, { id: 1 }, { title: "New title" });
 
     expect(boardWithTheModifiedColumn).toEqual({
       columns: [
-        { id: 1, title: 'New title', cards: [{ id: 1 }, { id: 2 }, { id: 3 }] },
-        { id: 2, title: 'Done', cards: [{ id: 4 }, { id: 5 }, { id: 6 }] },
+        { id: 1, title: "New title", cards: [{ id: 1 }, { id: 2 }, { id: 3 }] },
+        { id: 2, title: "Done", cards: [{ id: 4 }, { id: 5 }, { id: 6 }] },
       ],
     });
   });
@@ -133,9 +133,9 @@ describe('#changeColumn', () => {
 
 // TODO I'm not happy with this and with the remove card method
 // How can we handle this better?
-describe('#addCard', () => {
-  describe('when the card is added on top of the column', () => {
-    it('returns a board with the new card in the specified column at the specified position', () => {
+describe("#addCard", () => {
+  describe("when the card is added on top of the column", () => {
+    it("returns a board with the new card in the specified column at the specified position", () => {
       const board = {
         columns: [
           { id: 1, cards: [{ id: 1 }, { id: 2 }, { id: 3 }] },
@@ -144,7 +144,7 @@ describe('#addCard', () => {
       };
       const column = { id: 2 };
 
-      const boardWithTheNewColumn = addCard(board, column, { id: 7 }, { on: 'top' });
+      const boardWithTheNewColumn = addCard(board, column, { id: 7 }, { on: "top" });
 
       expect(boardWithTheNewColumn).toEqual({
         columns: [
@@ -155,8 +155,8 @@ describe('#addCard', () => {
     });
   });
 
-  describe('when the card is added on bottom of the column', () => {
-    it('returns a board with the new card in the specified column at the specified position', () => {
+  describe("when the card is added on bottom of the column", () => {
+    it("returns a board with the new card in the specified column at the specified position", () => {
       const board = {
         columns: [
           { id: 1, cards: [{ id: 1 }, { id: 2 }, { id: 3 }] },
@@ -165,7 +165,7 @@ describe('#addCard', () => {
       };
       const inColumn = { id: 2 };
 
-      const boardWithTheNewColumn = addCard(board, inColumn, { id: 7 }, { on: 'bottom' });
+      const boardWithTheNewColumn = addCard(board, inColumn, { id: 7 }, { on: "bottom" });
 
       expect(boardWithTheNewColumn).toEqual({
         columns: [
@@ -177,8 +177,8 @@ describe('#addCard', () => {
   });
 });
 
-describe('#removeCard', () => {
-  it('returns a board without the specified card', () => {
+describe("#removeCard", () => {
+  it("returns a board without the specified card", () => {
     const board = {
       columns: [
         { id: 1, cards: [{ id: 1 }, { id: 2 }, { id: 3 }] },
@@ -198,21 +198,21 @@ describe('#removeCard', () => {
   });
 });
 
-describe('#changeCard', () => {
+describe("#changeCard", () => {
   it("changes the card's board", () => {
     const board = {
       columns: [
-        { id: 1, title: 'Doing', cards: [{ id: 1 }, { id: 2 }, { id: 3 }] },
-        { id: 2, title: 'Done', cards: [{ id: 4 }, { id: 5, foo: 'bar' }, { id: 6 }] },
+        { id: 1, title: "Doing", cards: [{ id: 1 }, { id: 2 }, { id: 3 }] },
+        { id: 2, title: "Done", cards: [{ id: 4 }, { id: 5, foo: "bar" }, { id: 6 }] },
       ],
     };
 
-    const boardWithTheModifiedCard = changeCard(board, 5, { title: 'New title' });
+    const boardWithTheModifiedCard = changeCard(board, 5, { title: "New title" });
 
     expect(boardWithTheModifiedCard).toEqual({
       columns: [
-        { id: 1, title: 'Doing', cards: [{ id: 1 }, { id: 2 }, { id: 3 }] },
-        { id: 2, title: 'Done', cards: [{ id: 4 }, { id: 5, foo: 'bar', title: 'New title' }, { id: 6 }] },
+        { id: 1, title: "Doing", cards: [{ id: 1 }, { id: 2 }, { id: 3 }] },
+        { id: 2, title: "Done", cards: [{ id: 4 }, { id: 5, foo: "bar", title: "New title" }, { id: 6 }] },
       ],
     });
   });

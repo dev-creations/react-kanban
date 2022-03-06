@@ -1,26 +1,25 @@
-import React, { useState } from 'react';
-import ColumnForm from './components/ColumnForm';
+import { useState } from "react";
+import ColumnForm from "./components/ColumnForm";
 
-function ColumnAdder({ onConfirm }) {
+interface ColumnAdderProps {
+  onConfirm: (title: string) => void;
+}
+
+const ColumnAdder = ({ onConfirm }: ColumnAdderProps) => {
   const [isAddingColumn, setAddingColumn] = useState(false);
 
-  function confirmColumn(title) {
+  const confirmColumn = (title: string) => {
     onConfirm(title);
     setAddingColumn(false);
-  }
+  };
 
   return isAddingColumn ? (
     <ColumnForm onConfirm={confirmColumn} onCancel={() => setAddingColumn(false)} />
   ) : (
-    <div
-      style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', minWidth: '230px' }}
-      className='react-kanban-column-adder-button'
-      onClick={() => setAddingColumn(true)}
-      role='button'
-    >
+    <div className='react-kanban-column-adder-button' onClick={() => setAddingColumn(true)} role='button'>
       ➕
     </div>
   );
-}
+};
 
 export default ColumnAdder;

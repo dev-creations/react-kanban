@@ -1,7 +1,16 @@
-import React from 'react';
-import { Draggable } from 'react-beautiful-dnd';
+import { Draggable } from "react-beautiful-dnd";
 
-function Card({ children, index, renderCard, disableCardDrag }) {
+const Card = ({
+  children,
+  index,
+  renderCard,
+  disableCardDrag,
+}: {
+  children: any;
+  index: number;
+  renderCard: any;
+  disableCardDrag: boolean;
+}) => {
   return (
     <Draggable draggableId={String(children.id)} index={index} isDragDisabled={disableCardDrag}>
       {(provided, { isDragging }) => {
@@ -12,12 +21,12 @@ function Card({ children, index, renderCard, disableCardDrag }) {
             {...provided.dragHandleProps}
             data-testid={`card-${children.id}`}
           >
-            <div style={{ display: 'inline-block', whiteSpace: 'normal' }}>{renderCard(isDragging)}</div>
+            <div style={{ display: "inline-block", whiteSpace: "normal" }}>{renderCard(isDragging)}</div>
           </div>
         );
       }}
     </Draggable>
   );
-}
+};
 
 export default Card;

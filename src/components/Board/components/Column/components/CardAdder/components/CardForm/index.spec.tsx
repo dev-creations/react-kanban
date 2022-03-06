@@ -1,8 +1,8 @@
-import React from 'react';
-import { render, fireEvent, screen } from '@testing-library/react';
-import CardForm from '.';
+import React from "react";
+import { render, fireEvent, screen } from "@testing-library/react";
+import CardForm from ".";
 
-describe('<CardForm />', () => {
+describe("<CardForm />", () => {
   let subject, onConfirm, onCancel;
 
   function mount() {
@@ -17,61 +17,61 @@ describe('<CardForm />', () => {
     subject = onConfirm = onCancel = undefined;
   });
 
-  it('renders the card inputs', () => {
+  it("renders the card inputs", () => {
     expect(subject.container.querySelector('input[name="title"]')).toBeInTheDocument();
     expect(subject.container.querySelector('input[name="description"]')).toBeInTheDocument();
   });
 
-  it('focuses on the title input', () => {
+  it("focuses on the title input", () => {
     expect(subject.container.querySelector('input[name="title"]')).toHaveFocus();
   });
 
-  describe('when the user clicks confirm the input', () => {
-    describe('when the user has informed a valid card', () => {
+  describe("when the user clicks confirm the input", () => {
+    describe("when the user has informed a valid card", () => {
       beforeEach(() => {
-        fireEvent.change(subject.container.querySelector('input[name="title"]'), { target: { value: 'Card title' } });
+        fireEvent.change(subject.container.querySelector('input[name="title"]'), { target: { value: "Card title" } });
         fireEvent.change(subject.container.querySelector('input[name="description"]'), {
-          target: { value: 'Description' },
+          target: { value: "Description" },
         });
-        fireEvent.click(screen.queryByText('Add'));
+        fireEvent.click(screen.queryByText("Add"));
       });
 
-      it('calls the onConfirm prop passing the values', () => {
+      it("calls the onConfirm prop passing the values", () => {
         expect(onConfirm).toHaveBeenCalledTimes(1);
-        expect(onConfirm).toHaveBeenCalledWith({ title: 'Card title', description: 'Description' });
+        expect(onConfirm).toHaveBeenCalledWith({ title: "Card title", description: "Description" });
       });
 
-      it('does not call the onCancel prop', () => {
+      it("does not call the onCancel prop", () => {
         expect(onCancel).not.toHaveBeenCalled();
       });
     });
 
-    describe('when the user has not typed a card title', () => {
+    describe("when the user has not typed a card title", () => {
       beforeEach(() => {
-        fireEvent.change(subject.container.querySelector('input[name="title"]'), { target: { value: '' } });
-        fireEvent.click(screen.queryByText('Add'));
+        fireEvent.change(subject.container.querySelector('input[name="title"]'), { target: { value: "" } });
+        fireEvent.click(screen.queryByText("Add"));
       });
 
-      it('does not call the onConfirm prop', () => {
+      it("does not call the onConfirm prop", () => {
         expect(onConfirm).not.toHaveBeenCalled();
       });
 
-      it('does not call the onCancel prop', () => {
+      it("does not call the onCancel prop", () => {
         expect(onCancel).not.toHaveBeenCalled();
       });
     });
   });
 
-  describe('when the user cancels the input', () => {
+  describe("when the user cancels the input", () => {
     beforeEach(() => {
-      fireEvent.click(screen.queryByText('Cancel'));
+      fireEvent.click(screen.queryByText("Cancel"));
     });
 
-    it('calls the onCancel prop', () => {
+    it("calls the onCancel prop", () => {
       expect(onCancel).toHaveBeenCalledTimes(1);
     });
 
-    it('does not call the onConfirm prop', () => {
+    it("does not call the onConfirm prop", () => {
       expect(onConfirm).not.toHaveBeenCalled();
     });
   });

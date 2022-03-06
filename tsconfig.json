@@ -3,7 +3,7 @@
     "baseUrl": ".",
     "module": "es6",
     "target": "es5",
-    "jsx": "react",
+    "jsx": "react-jsx",
     "allowJs": true,
     "moduleResolution": "node",
     "esModuleInterop": true,
@@ -15,5 +15,6 @@
     },
     "outDir": "./dist"
   },
+  "exclude": ["src/**/*.spec.tsx", "src/**/*.spec.ts"],
   "include": ["src/**/*"]
 }

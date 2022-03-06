@@ -3,7 +3,7 @@ import {
   addInArrayAtPosition,
   changeElementOfPositionInArray,
   replaceElementOfArray,
-} from '@services/utils';
+} from "@services/utils";
 
 function reorderCardsOnColumn(column, reorderCards) {
   return { ...column, cards: reorderCards(column.cards) };
@@ -60,9 +60,9 @@ function changeColumn(board, column, newColumn) {
   return { ...board, columns: changedColumns };
 }
 
-function addCard(board, inColumn, card, { on } = { on: undefined }) {
+function addCard(board, inColumn, card, options: { on?: "top" | "bottom" | undefined }) {
   const columnToAdd = board.columns.find(({ id }) => id === inColumn.id);
-  const cards = addInArrayAtPosition(columnToAdd.cards, card, on === 'top' ? 0 : columnToAdd.cards.length);
+  const cards = addInArrayAtPosition(columnToAdd.cards, card, options?.on === "top" ? 0 : columnToAdd.cards.length);
   const columns = replaceElementOfArray(board.columns)({
     when: ({ id }) => inColumn.id === id,
     for: (value) => ({ ...value, cards }),

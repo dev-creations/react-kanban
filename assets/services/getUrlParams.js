@@ -1,25 +1,35 @@
-import { when } from '@services/utils'
+import { when } from "@services/utils";
 
-function isBoolean (value) {
-  return value === 'true' || value === 'false'
+function isBoolean(value) {
+  return value === "true" || value === "false";
 }
 
-function not (fn) {
+function not(fn) {
   return function (value) {
-    return !fn(value)
-  }
+    return !fn(value);
+  };
 }
 
 export default function () {
-  const url = new URL(window.location.href)
-  var params = {}
+  const url = new URL(window.location.href);
+  const params = {};
 
   for (const p of url.searchParams.entries()) {
-    const value = p[1]
+    const value = p[1];
 
-    when(value, isBoolean)(value => { params[p[0]] = Boolean(value) })
-    when(value, not(isBoolean))(value => { params[p[0]] = value })
+    when(
+      value,
+      isBoolean
+    )((value) => {
+      params[p[0]] = Boolean(value);
+    });
+    when(
+      value,
+      not(isBoolean)
+    )((value) => {
+      params[p[0]] = value;
+    });
   }
 
-  return params
+  return params;
 }
